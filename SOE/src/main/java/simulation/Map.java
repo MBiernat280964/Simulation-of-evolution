@@ -2,6 +2,10 @@ package simulation;
 
 import java.util.*;
 
+/**
+ * Object <code>Map</code> creates a two-dimensional map, using one of three templates chosen by the user
+ */
+
 public class Map {
     private ArrayList<Creature> population;
     public Map() {

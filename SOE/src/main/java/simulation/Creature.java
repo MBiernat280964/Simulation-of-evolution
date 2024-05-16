@@ -7,12 +7,12 @@ public abstract class Creature {
 
     static int numOfCreatures = 0;
 
-    void setAlivetoDead()
+    void setAliveToDead()
     {
         this.isAlive = false;
     }
 
-    public boolean getIsAlive() {
+    boolean getIsAlive() {
         return isAlive;
     }
 }
