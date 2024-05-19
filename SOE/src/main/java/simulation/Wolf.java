@@ -5,6 +5,7 @@ package simulation;
  */
 public class Wolf extends Creature {
     static int numOfWolf = 0;
+    static final int speed = 2;
     static final int numOfChildren = 2;
     /**
      * default constructor creating Object <code>Wolf</code>

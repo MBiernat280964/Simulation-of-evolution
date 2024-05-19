@@ -5,6 +5,7 @@ package simulation;
  */
 public class Dinosaur extends Creature {
     static int numOfDinosaur = 0;
+    static final int speed = 1;
     static final int numOfChildren = 5;
     /**
     * default constructor creating Object <code>Dinosaur</code>

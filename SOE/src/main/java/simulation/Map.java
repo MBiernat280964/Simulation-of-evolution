@@ -7,53 +7,51 @@ import java.util.*;
  */
 
 public class Map {
-    private ArrayList<Creature> population;
-    public Map() {
+    static ArrayList<Creature> population;
+    public Map(int num) {
         this.population = new ArrayList<>();
-        createMap1();
+        if (num == 1)
+            createMap1();
+        else if (num == 2)
+            createMap2();
+        else if (num == 3)
+            createMap3();
     }
 
     void addCreature(Creature creature)
     {
         population.add(creature);
     }
-
-    ArrayList<ArrayList<Integer>> map1 = new ArrayList<>();
-    ArrayList<Integer> temp = new ArrayList<>();
+    int[][] biome = new int[100][100];
+    static Creature[][] mapOfCreatures = new Creature[100][100];
 
     void createMap1()
     {
-        for (int i = 0; i < 100; i++)
-        {
-            for (int j = 0; j< 100; j++)
-            {
-                temp.add(0);
-            }
-            map1.add(temp);
-        }
+        /*
+        miejsce na stworzenie mapy z jeziorem
+         */
     }
 
     void createMap2()
     {
-        for (int i = 0; i < 100; i++)
-        {
-            for (int j = 0; j< 100; j++)
-            {
-                temp.add(0);
-            }
-            map1.add(temp);
-        }
+        /*
+        miejsce na stworzenie mapy z rzeka
+         */
     }
 
     void createMap3()
     {
-        for (int i = 0; i < 100; i++)
-        {
-            for (int j = 0; j< 100; j++)
-            {
-                temp.add(0);
-            }
-            map1.add(temp);
-        }
+        /*
+        miejsce na stworzenie mapy z oceanem(wyspa)
+         */
     }
+
+    static boolean checkIfFree(int x, int y)
+    {
+        if (mapOfCreatures[x][y] == null)
+            return true;
+        else
+            return false;
+    }
+
 }

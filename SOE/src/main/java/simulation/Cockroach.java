@@ -6,6 +6,7 @@ package simulation;
 public class Cockroach extends Creature {
     static int numOfCockroach = 0;
     static final int numOfChildren = 5;
+    static final int speed = 1;
 
     /**
      * default constructor creating Object <code>Cockroach</code>
