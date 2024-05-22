@@ -20,14 +20,14 @@ public abstract class Creature {
     {
         int rand_int1=0;
         int rand_int2 =0;
-        do
-        {
+        //do
+        //{
             rand_int1 = rand.nextInt(100);
             rand_int2 = rand.nextInt(100);
             this.x = rand_int1;
             this.y = rand_int2;
-        }
-        while (Map.checkIfFree(rand_int1, rand_int2) == true);
+        //}
+        //while (map.checkIfFree(rand_int1, rand_int2) == true);
     }
 }
 

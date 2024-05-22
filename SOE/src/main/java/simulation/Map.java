@@ -1,14 +1,25 @@
 package simulation;
 
 import java.util.*;
+import java.lang.Math;
 
 /**
- * Object <code>Map</code> creates a two-dimensional map, using one of three templates chosen by the user
+ * Object <code>Map</code> creates a three-dimensional map, using one of three templates chosen by the user
+ * it is responsible for generating terrain
+ * as well as storing information about terrain and cordinates of creatures placed on the map
  */
 
 public class Map {
+    final public int sizeOfMap = 20;
     static ArrayList<Creature> population;
-    public Map(int num) {
+    //boolean [][] biome = new boolean [sizeOfMap][sizeOfMap];
+    //Creature[][] mapOfCreatures = new Creature[sizeOfMap][sizeOfMap];
+
+    //map - char array [][][] layer 0: biome, layer 1: creatures
+
+    char [][][] map = new char [2][sizeOfMap][sizeOfMap];
+
+    /*public Map(int num) {
         this.population = new ArrayList<>();
         if (num == 1)
             createMap1();
@@ -16,42 +27,57 @@ public class Map {
             createMap2();
         else if (num == 3)
             createMap3();
+    }*/
+
+    public Map() {
+        this.genMapLake();
+        this.showMap();
+    }
+
+    void showMap() {
+        for (int i = 0; i < sizeOfMap; i++) {
+            for (int j = 0; j < sizeOfMap; j++) {
+                System.out.print(this.map [0][i][j] + " ");
+            }
+            System.out.print("\n");
+        }
     }
 
     void addCreature(Creature creature)
     {
         population.add(creature);
     }
-    int[][] biome = new int[100][100];
-    static Creature[][] mapOfCreatures = new Creature[100][100];
 
-    void createMap1()
+
+    //on layer 0: W means water while L means land
+    //on layer 1: W-wolf, C-cockroach, B-bird, D-dinosaur, H-human, F-fish
+    //terrain created in real-time with the help of two paraboles
+    void genMapLake() //lake map
     {
-        /*
-        miejsce na stworzenie mapy z jeziorem
-         */
+        for (int i = 0; i < sizeOfMap; i++) {
+            for (int j = 0; j < sizeOfMap; j++) {
+                if (i >= (j-sizeOfMap/2)*(j-sizeOfMap/2)/4 && (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +3*sizeOfMap/4 > 0 && i <= (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +3*sizeOfMap/4){
+                    this.map[0][i][j] = 'L';
+                } else {
+                    this.map[0][i][j] = 'W';
+                }
+            }
+        }
     }
 
-    void createMap2()
+    void genMapRiver() //river map
     {
         /*
         miejsce na stworzenie mapy z rzeka
          */
     }
 
-    void createMap3()
+    void genMapIsland() //island map
     {
         /*
         miejsce na stworzenie mapy z oceanem(wyspa)
          */
     }
 
-    static boolean checkIfFree(int x, int y)
-    {
-        if (mapOfCreatures[x][y] == null)
-            return true;
-        else
-            return false;
-    }
 
 }

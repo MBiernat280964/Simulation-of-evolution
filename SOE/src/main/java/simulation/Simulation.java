@@ -2,32 +2,49 @@ package simulation;
 
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
+ * It is responsible for creation and deletion of Creatures instances and updating map from Map instance
  */
+
+//TODO: a class which holds the logic for creatures' behaviours
 public class Simulation {
-    Simulation()
-    {
-        Map mapa = new Map(1);
+
+    int years = 100;     // default: from user input
+
+    Simulation(int years) {
+        Map map = new Map();
+        this.years = years;
+
     }
 
-    /* to defaultowe, do podania przez uzytkownika*/ int yearsInput = 100;
     void updateMap(Creature creature) {
-        Map.mapOfCreatures[creature.x][creature.y] = creature;
+        //bruhowo
     }
     void simulationCycle()
     {
         int years = 0;
-        while (years < yearsInput) {
+        while (years < this.years) {
             int i = 0;
             while(Map.population.get(i) != null)
             {
                 /*
-                co sie dzieje ze zwierzatkiem podczas jego kolejki
+                1. checks for enemies
+                    -if no enemies, proceed forward
+                    -if enemies found, fight/flight behaviour. END OF ACTION QUEUE
+                2. checks for members of the same species
+                    -if found, chance to reproduce
+                    -if none is found in the nearest vicinity, wander around until at least one other is found
                  */
                 i++;
             }
         }
     }
-
+    /*boolean checkIfFree(int x, int y)
+    {
+        if (map.map[1][x][y] == null)
+            return true;
+        else
+            return false;
+    }*/
     }
 
 
