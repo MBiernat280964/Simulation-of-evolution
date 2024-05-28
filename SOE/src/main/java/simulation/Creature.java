@@ -4,21 +4,12 @@ import java.util.Random;
 public class Creature {
     private Random rand = new Random(System.currentTimeMillis());
     private Species species;
-    private int x,y;
+    private int x;
+    private int y;
     private int hp;
 
     public Creature(Species species) {
         this.species = species;
-    }
-
-    void randCoordinates()
-    {
-        //do
-        //{
-            x = rand.nextInt(100);
-            y = rand.nextInt(100);
-        //}
-        //while (map.checkIfFree(rand_int1, rand_int2) == true);
     }
 
     public Species getSpecies() {

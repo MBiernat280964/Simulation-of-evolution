@@ -11,7 +11,7 @@ import java.lang.Math;
 
 public class Map {
     final public int sizeOfMap = 20;
-    static ArrayList<Creature> population;
+    static ArrayList<Creature> population = new ArrayList<Creature>();
     //boolean [][] biome = new boolean [sizeOfMap][sizeOfMap];
     //Creature[][] mapOfCreatures = new Creature[sizeOfMap][sizeOfMap];
 
@@ -31,13 +31,19 @@ public class Map {
 
     public Map() {
         this.genMapLake();
-        this.showMap();
+
     }
 
     void showMap() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
-                System.out.print(this.map [0][i][j] + " ");
+                if (this.map[1][i][j] == 0) {
+                    System.out.print(this.map [0][i][j] + " ");
+
+                }
+                else {
+                    System.out.print("\u001B[31m" + this.map [1][i][j] + " \u001B[0m");
+                }
             }
             System.out.print("\n");
         }
