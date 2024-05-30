@@ -73,8 +73,9 @@ public class Simulation {
     }*/
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
+        System.out.println("costam");
     }
-    // yey
+
 }
 
 

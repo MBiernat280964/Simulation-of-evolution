@@ -81,6 +81,7 @@ public class GUI extends JFrame {
 
                 System.out.println(mapName);
                 dispose();
+                Simulation.main(null);
             }
         });
         //this.getContentPane().setBackground(Color.BLUE);
