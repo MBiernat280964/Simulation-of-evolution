@@ -3,6 +3,7 @@ package simulation;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
  * It is responsible for creation and deletion of Creatures instances and updating map from Map instance
@@ -24,7 +25,6 @@ public class Simulation {
         this.years = years;
         this.generateMap();
     }
-
     private void initSpecies(){
         speciesList = new ArrayList<>();
         speciesList.add(wolf);
@@ -107,9 +107,12 @@ public class Simulation {
     }*/
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
+        System.out.println("costam");
     }
     // yey
 }
+
+
 
 
 
