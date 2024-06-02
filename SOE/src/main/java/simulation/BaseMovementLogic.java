@@ -8,9 +8,16 @@ public abstract class BaseMovementLogic implements MovementLogic{
 
     }
 
-    private List<Creature> findNearestEnemies (){
+    private List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
+        for (int i=0; i<creatureList.size() ; i++){
 
+        }
         return null;
+    }
+
+    private boolean isEnemy (Creature creature, Creature other){
+
+        return false;
     }
 
     private List<Creature> findNearestFriends (){
@@ -31,7 +38,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return false;
     }
     @Override
-    public void performSingleStep() {
+    public void performSingleStep(Creature creature, List<Creature> creatureList) {
 
     }
 }

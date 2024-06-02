@@ -1,5 +1,7 @@
 package simulation;
 
+import java.util.List;
+
 public interface MovementLogic {
 //    void moveSingleStep ();
 //    List<Creature> findNearestEnemies ();
@@ -12,5 +14,5 @@ public interface MovementLogic {
 //     */
 //    int[] chooseMoveDirection ();
 //    boolean isMovePosible ();
-    void performSingleStep ();
+    void performSingleStep (Creature creature, List<Creature> creatureList);
 }
