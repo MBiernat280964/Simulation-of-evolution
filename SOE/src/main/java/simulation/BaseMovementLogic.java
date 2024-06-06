@@ -4,20 +4,16 @@ import java.util.List;
 
 public abstract class BaseMovementLogic implements MovementLogic{
 
+    private Simulation simulation;
+
     void moveSingleStep (){
 
     }
 
     private List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
-        for (int i=0; i<creatureList.size() ; i++){
+        creatureList = simulation.getCreatureList();
 
-        }
         return null;
-    }
-
-    private boolean isEnemy (Creature creature, Creature other){
-
-        return false;
     }
 
     private List<Creature> findNearestFriends (){

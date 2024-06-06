@@ -12,7 +12,6 @@ import java.lang.Math;
 public class Map {
     final public int sizeOfMap = 20;
     //final public int sizeOfMap = 50;
-    static ArrayList<Creature> population = new ArrayList<Creature>();
     //boolean [][] biome = new boolean [sizeOfMap][sizeOfMap];
     //Creature[][] mapOfCreatures = new Creature[sizeOfMap][sizeOfMap];
 
@@ -51,10 +50,6 @@ public class Map {
         }
     }
 
-    void addCreature(Creature creature)
-    {
-        population.add(creature);
-    }
 
 
     //on layer 0: W means water while L means land

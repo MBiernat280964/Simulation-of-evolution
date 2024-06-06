@@ -1,5 +1,6 @@
 package simulation;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Simulation {
     private int years = 100;     // default: from user input
 
     private List<Species> speciesList;
+    private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
 
     Species wolf = new Species(2,1,"Wolf");
@@ -35,6 +37,7 @@ public class Simulation {
         speciesList.add(fish);
 
         enemyFoodMapping.initSpecies(speciesList);
+
         enemyFoodMapping.addEnemy(wolf , dinosaur);
         enemyFoodMapping.addEnemy(bird , human);
         enemyFoodMapping.addEnemy(cockroach , fish);
@@ -58,20 +61,6 @@ public class Simulation {
 
     void generateMap (){
         Map map = new Map();
-
-        for (int i=0; i<=3; i++){
-            map.population.add (new Creature(wolf));
-            map.map[1][i+1][i+8] = 'w';
-        }
-        for (int i=4; i<=6; i++){
-            map.population.add (new Creature(cockroach));
-            map.map[1][i][i+2] = 'c';
-        }
-        for (int i=7; i<=9; i++){
-            map.population.add (new Creature(dinosaur));
-            map.map[1][i-1][i+4] = 'd';
-        }
-
         map.showMap();
     }
 
@@ -79,32 +68,60 @@ public class Simulation {
         //bruhowo
         System.out.println("This method updates map");
     }
+
+    public int[] getCreatureCount(){
+        int[] animalCount = new int[6];
+        for(int i=0; i<creatureList.size(); i++){
+            if (creatureList.get(i).getSpecies() == bird) {
+                animalCount[0]++;
+            }
+            else if (creatureList.get(i).getSpecies() == cockroach) {
+                animalCount[1]++;
+            }
+            else if (creatureList.get(i).getSpecies() == dinosaur) {
+                animalCount[2]++;
+            }
+            else if (creatureList.get(i).getSpecies() == fish) {
+                animalCount[3]++;
+            }
+            else if (creatureList.get(i).getSpecies() == human) {
+                animalCount[4]++;
+            }
+            else if (creatureList.get(i).getSpecies() == wolf) {
+                animalCount[5]++;
+            }
+            else {
+                System.out.println("error: creature species not found");
+                return null;
+            }
+        }
+        return animalCount;
+    }
+
+    void addToPopulation (Creature creature){
+        creatureList.add(creature);
+    }
+    void removeFromPopulation (Creature creature){
+        creatureList.remove(creature);
+    }
+
+    public List<Creature> getCreatureList() {
+        return creatureList;
+    }
+
     void simulationCycle()
     {
         int years = 0;
         while (years < this.years) {
             int i = 0;
-            while(Map.population.get(i) != null)
+            while(creatureList.get(i) != null)
             {
-                /*
-                1. checks for enemies
-                    -if no enemies, proceed forward
-                    -if enemies found, fight/flight behaviour. END OF ACTION QUEUE
-                2. checks for members of the same species
-                    -if found, chance to reproduce
-                    -if none is found in the nearest vicinity, wander around until at least one other is found
-                 */
+
                 i++;
             }
         }
     }
-    /*boolean checkIfFree(int x, int y)
-    {
-        if (map.map[1][x][y] == null)
-            return true;
-        else
-            return false;
-    }*/
+
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
         System.out.println("costam");

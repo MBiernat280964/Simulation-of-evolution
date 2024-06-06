@@ -28,7 +28,20 @@ public class EnemyFoodUtility {
     }
 
     public boolean isEnemy(Creature creature, Creature other){
+        for (int i=0; i<speciesToEnemies.get(creature).size(); i++) {
+            if (other.getSpecies().getName().equals(speciesToEnemies.get(creature).get(i))) {
+                return true;
+            }
+        }
         return false;
     }
 
+    public boolean isFood(Creature creature, Creature other){
+        for (int i=0; i<speciesToFoods.get(creature).size(); i++) {
+            if (other.getSpecies().getName().equals(speciesToFoods.get(creature).get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
