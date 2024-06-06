@@ -1,2 +1,5 @@
-package simulation;public class EndingWindow {
+package simulation;
+import javax.swing.*;
+
+public class EndingWindow extends JFrame {
 }

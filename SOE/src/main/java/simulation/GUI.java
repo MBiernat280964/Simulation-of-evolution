@@ -1,13 +1,18 @@
 package simulation;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 /**
  * Object <code>GUI</code> handles the user interface
  */
 
-public class GUI {
-    public GUI()
-    {
+public class GUI extends JFrame {
+    String mapName = "riverside";
+    HashMap<String, Integer> mapOfCreatures = new HashMap<>();
+
+    public GUI() {
         JFrame frame = new JFrame();
         int wys = Toolkit.getDefaultToolkit().getScreenSize().height;
         int szer = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -15,22 +20,21 @@ public class GUI {
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
 
-        frame.setSize(szer/10, wys/2);
+        frame.setSize(szer / 10, wys / 2);
         int szerRamki = frame.getSize().width;
         int wysRamki = frame.getSize().height;
-        frame.setLocation((szer-szerRamki)/2, (wys-wysRamki)/2);
+        frame.setLocation((szer - szerRamki) / 2, (wys - wysRamki) / 2);
 
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage("kukaracza.jpg"));
     }
 
-}
+
     /**
      * Contains all the components placed in GUI frame
      * Sets GroupLayout for frame
      * Called out in default constructor
      */
-    public void initComponents()
-    {
+    public void initComponents() {
         biomes.add(island);
         biomes.add(riverside);
         biomes.add(seaside);
@@ -56,12 +60,12 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                mapOfCreatures.put("wolves", (Integer)l1.getValue());
-                mapOfCreatures.put("humans", (Integer)l2.getValue());
-                mapOfCreatures.put("cockroach", (Integer)l3.getValue());
-                mapOfCreatures.put("dinos", (Integer)l4.getValue());
-                mapOfCreatures.put("bird", (Integer)l5.getValue());
-                mapOfCreatures.put("fish", (Integer)l6.getValue());
+                mapOfCreatures.put("wolves", (Integer) l1.getValue());
+                mapOfCreatures.put("humans", (Integer) l2.getValue());
+                mapOfCreatures.put("cockroach", (Integer) l3.getValue());
+                mapOfCreatures.put("dinos", (Integer) l4.getValue());
+                mapOfCreatures.put("bird", (Integer) l5.getValue());
+                mapOfCreatures.put("fish", (Integer) l6.getValue());
 
                 System.out.println(mapName);
                 dispose();
