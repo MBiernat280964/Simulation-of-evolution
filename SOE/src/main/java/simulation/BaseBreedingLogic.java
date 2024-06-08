@@ -1,17 +1,18 @@
 package simulation;
 
 public abstract class BaseBreedingLogic implements BreedingLogic{
+
     protected boolean isBreedingEnabled() {
         return false;
     }
 
-    protected boolean isEnemyNear() {
+    /*protected boolean isEnemyNear() {git
         return false;
     }
 
     protected boolean isPartnerNear() {
         return false;
-    }
+    }*/
 
     protected boolean isMaxPopulationReached() {
         return false;
