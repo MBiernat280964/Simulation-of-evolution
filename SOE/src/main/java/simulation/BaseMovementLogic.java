@@ -2,9 +2,11 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class BaseMovementLogic implements MovementLogic{
     private EnemyFoodUtility enemyFoodUtility;
+    Random random = new Random();
 
     void moveSingleStep (){
 
@@ -69,8 +71,6 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-//     * @return int[2] = {x, y}
-
     private int[] chooseMoveDirection (Creature creature, List<Creature> creatureList){
         int enemyDist = Integer.MAX_VALUE;
         List <Creature> enemies = findNearestEnemies(creature, creatureList);
@@ -82,23 +82,71 @@ public abstract class BaseMovementLogic implements MovementLogic{
         if(!friends.isEmpty()){
             friendDist = calculateDistance(creature, friends.get(0));
         }
+
+        Creature other;
+        int x;
+        int y;
+        int newCreaterX = creature.getX();
+        int newCreaterY = creature.getY();
+
         if(enemyDist<friendDist){
-            //odejmowanie wartości x, y i obliczanie wektora, po czym losowanie jak do niego iść
+            other = friends.get(random.nextInt(friends.size()));
+            x= other.getX() - creature.getX();
+            y= other.getY() - creature.getY();
+            int i = random.nextInt(10);
+
+            if (i<5 && x!=0){
+                if (x<0){
+                    newCreaterX=creature.getX()-1;
+                } else {
+                    newCreaterX=creature.getX()+1;
+                }
+            } else {
+                if (y<0){
+                    newCreaterY = creature.getY()-1;
+                } else if (y>0){
+                    newCreaterY=creature.getY()+1;
+                }
+            }
+
         } else {
-            //Jeżeli nie to ucieka od enemy (dinozaury będą iść do jedzenia)
+            other = enemies.get(random.nextInt(enemies.size()));
+            x= creature.getX() - other.getX();
+            y= creature.getY() - other.getY();
+            int i = random.nextInt(8);
+
+            if (i<4 && x!=0){
+                if (x<0){
+                    newCreaterX=creature.getX()-1;
+                } else {
+                    newCreaterX=creature.getX()+1;
+                }
+            } else {
+                if (y<0){
+                    newCreaterY = creature.getY()-1;
+                } else if (y>0){
+                    newCreaterY=creature.getY()+1;
+                }
+            }
         }
-        return null;
+        int[] vector ={newCreaterX,newCreaterY};
+        return vector;
     }
-    private boolean isMovePosible (){
-        /*Trzeba sprawdzić czy dane pole (x,y) jest wolne
-        * Ale jak to sprawdzić?
-        * Jak dostać się do tego co jest na danym polu
-        * iterujesz po wszystkim i spradzasz czy coś na tym stoi*/
-        return false;
+    private boolean isMovePosible (Creature creature, List <Creature> creatureList){
+        for (int i=0; i<creatureList.size(); i++){
+            if (creatureList.get(i).getX()== chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]){
+                return false;
+            }
+        }
+        return true;
     }
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList) {
-        //Wszystkie kroki po kolei
-
+        for(int i=0; i<creature.getSpecies().getSpeed(); i++){
+            if (isMovePosible(creature, creatureList)){
+                creature.setX(chooseMoveDirection(creature, creatureList)[0]);
+                creature.setY(chooseMoveDirection(creature, creatureList)[1]);
+            }
+        }
     }
 }
