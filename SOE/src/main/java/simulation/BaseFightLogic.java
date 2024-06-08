@@ -2,10 +2,12 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class BaseFightLogic implements FightLogic{
 
     EnemyFoodUtility enemyFoodUtility;
+    Random random = new Random();
 
     private List<Creature> findEnemies (Creature creature, List<Creature> creatureList){
         List<Creature> results = new ArrayList<>();
@@ -20,22 +22,39 @@ public abstract class BaseFightLogic implements FightLogic{
         return results;
     }
 
-    private Creature chooseEnemy (){
-
-        return null;
+    private Creature chooseEnemy (Creature creature, List<Creature> creatureList){
+        Creature other = null;
+        if (!findEnemies(creature, creatureList).isEmpty()) {
+            other = findEnemies(creature, creatureList).get(random.nextInt(findEnemies(creature, creatureList).size()));
+        }
+        return other;
     }
 
-    void attack (Creature creature, Creature other){
-        //Zaatakowanie innej kreatury
+    void attack (Creature other){
         int hp;
         hp = other.getHp();
         hp--;
         other.setHp(hp);
     }
 
+    private boolean isAttackPosible (Creature creature, List <Creature> creatureList){
+        if (creature.getHp()==0){
+            return false;
+        }
+        if (findEnemies(creature, creatureList).isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
     @Override
-    public boolean performAttack() {
-        //Czy został przeprowadzony atak, jeżeli nie to nie uwzględnia przy kolejnej turze, jeśli true to usuwa z llisty atakujących na daną kolejkę
+    public boolean performAttack(Creature creature, List <Creature> creatureList) {
+        for (int i=0; i<creatureList.size(); i++){
+            if (isAttackPosible(creature, creatureList)){
+                attack(chooseEnemy(creature, creatureList));
+            }
+        }
+        //TODO usuwanie z listy atakujących na kolejkę
         return false;
     }
 }

@@ -8,13 +8,9 @@ public abstract class BaseMovementLogic implements MovementLogic{
     private EnemyFoodUtility enemyFoodUtility;
     Random random = new Random();
 
-    void moveSingleStep (){
-
-    }
-
     private int calculateDistance(Creature creature, Creature other){
         int dist = Math.abs(creature.getX() - other.getX()) + Math.abs(creature.getY() - other.getY());
-        return 0;
+        return dist;
     }
 
     private List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
@@ -115,7 +111,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
             y= creature.getY() - other.getY();
             int i = random.nextInt(8);
 
-            if (i<4 && x!=0){
+            if (i<5 && x!=0){
                 if (x<0){
                     newCreaterX=creature.getX()-1;
                 } else {
@@ -146,7 +142,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
             if (isMovePosible(creature, creatureList)){
                 creature.setX(chooseMoveDirection(creature, creatureList)[0]);
                 creature.setY(chooseMoveDirection(creature, creatureList)[1]);
-            }
+            } //    TODO usuwa mi speeda przypadkiem, ups
         }
     }
 }
