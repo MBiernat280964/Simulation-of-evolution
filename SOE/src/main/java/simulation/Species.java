@@ -4,13 +4,15 @@ public class Species {
     private int speed;
     private int baseHp;
     private String name;
-    private float breedingChance;
+    private int breedingChance;
+    private int maxPopulation;
 
-    public Species(int speed, int baseHp, String name, float breedingChance) {
+    public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation) {
         this.speed = speed;
         this.baseHp = baseHp;
         this.name = name;
         this.breedingChance = breedingChance;
+        this.maxPopulation = maxPopulation;
     }
 
     public int getSpeed() {
@@ -37,11 +39,19 @@ public class Species {
         this.name = name;
     }
 
-    public float getBreedingChance() {
+    public int getBreedingChance() {
         return breedingChance;
     }
 
-    public void setBreedingChance(float breedingChance) {
+    public void setBreedingChance(int breedingChance) {
         this.breedingChance = breedingChance;
+    }
+
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
+
+    public void setMaxPopulation(int maxPopulation) {
+        this.maxPopulation = maxPopulation;
     }
 }

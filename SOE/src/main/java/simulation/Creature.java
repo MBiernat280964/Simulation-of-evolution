@@ -8,6 +8,7 @@ public class Creature {
     private int x;
     private int y;
     private int hp;
+    private boolean isBreedingEnabled;
 
     public Creature(Species species) {
         this.species = species;
@@ -39,6 +40,14 @@ public class Creature {
 
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    public boolean isBreedingEnabled() {
+        return isBreedingEnabled;
+    }
+
+    public void setBreedingEnabled(boolean breedingEnabled) {
+        isBreedingEnabled = breedingEnabled;
     }
 }
 

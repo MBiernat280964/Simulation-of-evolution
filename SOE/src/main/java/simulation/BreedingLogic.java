@@ -1,12 +1,8 @@
 package simulation;
 
+import java.util.List;
+
 public interface BreedingLogic {
 
-//    boolean isBreedingEnabled ();
-//    boolean isEnemyNear ();
-//    boolean isPartnerNear ();
-//    boolean isMaxPopulationReached ();
-//    void drawBreedingChance ();
-//    void breed (Creature secondParent);
-    void performBreeding ();
+    void performBreeding(Creature creature, Creature secondParent, List<Creature> creatureList, int populationCount);
 }

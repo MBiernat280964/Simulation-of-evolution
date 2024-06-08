@@ -35,7 +35,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
         int maxDistanceToFriend = Integer.MAX_VALUE;
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
-            if (creature.equals(creatureList.get(i))) {
+            if (creature.getSpecies()==creatureList.get(i).getSpecies()) {
                 int dist =  calculateDistance(creature, creatureList.get(i));
                 if(dist < maxDistanceToFriend){
                     maxDistanceToFriend = dist;

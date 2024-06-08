@@ -17,12 +17,12 @@ public class Simulation {
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
 
-    Species wolf = new Species(2,1,"Wolf");
-    Species bird = new Species(10, 1, "Bird");
-    Species cockroach = new Species(1, 1, "Cockroach");
-    Species human = new Species(3, 3, "Human");
-    Species dinosaur = new Species(1, 6, "Dinosaur");
-    Species fish = new Species(5, 1, "Fish");
+    Species wolf = new Species(2,1,"Wolf", 1, 20);
+    Species bird = new Species(10, 1, "Bird", 1, 20);
+    Species cockroach = new Species(1, 1, "Cockroach", 1, 20);
+    Species human = new Species(3, 3, "Human", 1, 20);
+    Species dinosaur = new Species(1, 6, "Dinosaur", 1, 20);
+    Species fish = new Species(5, 1, "Fish", 1, 20);
     Simulation(int years) {
         this.years = years;
         this.generateMap();
