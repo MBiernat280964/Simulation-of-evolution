@@ -83,9 +83,11 @@ public class Simulation {
     }
     
     void addToPopulation (Creature creature){
-        creatureList.add(creature);
+        DefaultBreed.performBreeding(creature, creatureList, creatureList.size()); //ma byc static z jakiegos powodu
+        creatureList.add(0,creature);
     }
     void removeFromPopulation (Creature creature){
+
         creatureList.remove(creature);
     }
 

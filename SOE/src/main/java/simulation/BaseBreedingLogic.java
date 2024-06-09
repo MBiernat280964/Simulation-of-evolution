@@ -120,7 +120,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
             }
         }
     }
-
+//TODO: nie nestowac if
     @Override
     public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount) {
         if (isEmptySpotAround(creature, creatureList)){
