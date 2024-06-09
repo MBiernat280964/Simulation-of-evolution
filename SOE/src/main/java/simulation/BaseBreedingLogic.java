@@ -120,19 +120,10 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
             }
         }
     }
-//TODO: nie nestowac if
     @Override
     public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount) {
-        if (isEmptySpotAround(creature, creatureList)){
-            if (!isEnemyNear(creature, creatureList)){
-                if (isPartnerNear(creature, creatureList)){
-                    if (drawBreedingChance(creature)){
-                        if (!isMaxPopulationReached(creature, populationCount)){
-                            breed(creature, chooseSecondParent(creature, creatureList), creatureList);
-                        }
-                    }
-                }
-            }
+        if (isEmptySpotAround(creature, creatureList) && !isEnemyNear(creature, creatureList) && isPartnerNear(creature, creatureList) && drawBreedingChance(creature) && !isMaxPopulationReached(creature, populationCount)){
+            breed(creature, chooseSecondParent(creature, creatureList), creatureList);
         }
     }
 
