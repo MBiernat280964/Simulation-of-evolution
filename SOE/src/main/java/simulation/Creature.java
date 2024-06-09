@@ -3,12 +3,12 @@ import java.util.List;
 import java.util.Random;
 
 public class Creature {
-    private Random rand = new Random(System.currentTimeMillis());
     private Species species;
     private int x;
     private int y;
     private int hp;
     private boolean isBreedingEnabled;
+    private int speed;
 
     public Creature(Species species) {
         this.species = species;
@@ -48,6 +48,14 @@ public class Creature {
 
     public void setBreedingEnabled(boolean breedingEnabled) {
         isBreedingEnabled = breedingEnabled;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }
 

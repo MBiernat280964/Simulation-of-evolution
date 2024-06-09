@@ -1,5 +1,6 @@
 package simulation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -88,6 +89,21 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
         return false;
     }
 
+    private Creature chooseSecondParent (Creature creature, List<Creature> creatureList){
+        Creature secondParent;
+        List<Creature> potentialParents = new ArrayList<Creature>();
+        for(int i = 0; i < creatureList.size(); i++){
+            if (creature.getSpecies()==creatureList.get(i).getSpecies()) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - creatureList.get(i).getX(), 2) + Math.pow(creature.getY() - creatureList.get(i).getY(), 2));
+                if(dist <= Math.sqrt(2)){
+                    if(creatureList.get(i).isBreedingEnabled())
+                        potentialParents.add(creatureList.get(i));
+                }
+            }
+        }
+        secondParent= potentialParents.get(random.nextInt(potentialParents.size()));
+        return secondParent;
+    }
 
     protected void breed(Creature creature, Creature secondParent, List<Creature> creatureList) {
         while(creature.isBreedingEnabled() || secondParent.isBreedingEnabled()){
@@ -99,18 +115,20 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
                 creature.setBreedingEnabled(false);
                 secondParent.setBreedingEnabled(false);
                 baby.setBreedingEnabled(false);
+                creature.setSpeed(0);
+                secondParent.setSpeed(0);
             }
         }
     }
 
     @Override
-    public void performBreeding(Creature creature, Creature secondParent, List<Creature> creatureList, int populationCount) {
+    public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount) {
         if (isEmptySpotAround(creature, creatureList)){
             if (!isEnemyNear(creature, creatureList)){
                 if (isPartnerNear(creature, creatureList)){
                     if (drawBreedingChance(creature)){
                         if (!isMaxPopulationReached(creature, populationCount)){
-                            breed(creature, secondParent, creatureList);
+                            breed(creature, chooseSecondParent(creature, creatureList), creatureList);
                         }
                     }
                 }
