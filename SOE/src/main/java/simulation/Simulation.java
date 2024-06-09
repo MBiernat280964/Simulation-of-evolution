@@ -112,9 +112,6 @@ public class Simulation {
             for(int i=0; i<creatureList.size(); i++){
                 creatureList.get(i).setSpeed(creatureList.get(i).getSpecies().getSpeed());
                 creatureList.get(i).setHp(creatureList.get(i).getSpecies().getBaseHp());
-            }
-            for(int i=0; i<creatureList.size(); i++)
-            {
                 otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 while(creatureList.get(i).getSpeed()!=0) {
                     defaultMovement.performSingleStep(creatureList.get(i), creatureList);
@@ -131,9 +128,7 @@ public class Simulation {
         Simulation simulation = new Simulation(1);
         simulation.initSpecies();
         simulation.simulationCycle();
-        System.out.println("costam");
     }
-    // yey
 }
 
 
