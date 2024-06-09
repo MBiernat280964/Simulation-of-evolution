@@ -20,12 +20,12 @@ public class Simulation {
     private DefaultFight defaultFight = new DefaultFight();
     private OtherBreed otherBreed = new OtherBreed();
 
-    Species wolf = new Species(2,1,"Wolf", 1, 20);
-    Species bird = new Species(10, 1, "Bird", 1, 20);
-    Species cockroach = new Species(1, 1, "Cockroach", 1, 20);
-    Species human = new Species(3, 3, "Human", 1, 20);
-    Species dinosaur = new Species(1, 6, "Dinosaur", 1, 20);
-    Species fish = new Species(5, 1, "Fish", 1, 20);
+    Species wolf = new Species(2,1,"Wolf", 4, 200);
+    Species bird = new Species(10, 1, "Bird", 8, 200);
+    Species cockroach = new Species(1, 1, "Cockroach", 2, 150);
+    Species human = new Species(3, 3, "Human", 4, 200);
+    Species dinosaur = new Species(1, 6, "Dinosaur", 2, 100);
+    Species fish = new Species(5, 1, "Fish", 8, 150);
     Simulation(int years) {
         this.years = years;
         this.generateMap();
@@ -72,35 +72,16 @@ public class Simulation {
         System.out.println("This method updates map");
     }
 
-    public int[] getCreatureCount(){
-        int[] animalCount = new int[6];
-        for(int i=0; i<creatureList.size(); i++){
-            if (creatureList.get(i).getSpecies() == bird) {
-                animalCount[0]++;
-            }
-            else if (creatureList.get(i).getSpecies() == cockroach) {
-                animalCount[1]++;
-            }
-            else if (creatureList.get(i).getSpecies() == dinosaur) {
-                animalCount[2]++;
-            }
-            else if (creatureList.get(i).getSpecies() == fish) {
-                animalCount[3]++;
-            }
-            else if (creatureList.get(i).getSpecies() == human) {
-                animalCount[4]++;
-            }
-            else if (creatureList.get(i).getSpecies() == wolf) {
-                animalCount[5]++;
-            }
-            else {
-                System.out.println("error: creature species not found");
-                return null;
+    public int getCreatureCount(Species species){
+        int count = 0;
+        for (int i=0; i<creatureList.size(); i++){
+            if (creatureList.get(i).getSpecies()==species){
+              count++;
             }
         }
-        return animalCount;
+        return count;
     }
-
+    
     void addToPopulation (Creature creature){
         creatureList.add(creature);
     }
@@ -122,11 +103,14 @@ public class Simulation {
             }
             for(int i=0; i<creatureList.size(); i++)
             {
-                otherBreed.performBreeding(creatureList.get(i), creatureList, 12);
+                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 while(creatureList.get(i).getSpeed()!=0) {
                     defaultMovement.performSingleStep(creatureList.get(i), creatureList);
                 }
                 defaultFight.performAttack(creatureList.get(i), creatureList);
+                if (creatureList.get(i).getHp()==0){
+                    creatureList.remove(i);
+                }
             }
         }
     }
