@@ -68,7 +68,6 @@ public class Simulation {
     }
 
     void updateMap(Creature creature) {
-        //bruhowo
         System.out.println("This method updates map");
     }
 
@@ -81,14 +80,25 @@ public class Simulation {
         }
         return count;
     }
-    
-    void addToPopulation (Creature creature){
-        DefaultBreed.performBreeding(creature, creatureList, creatureList.size()); //ma byc static z jakiegos powodu
-        creatureList.add(0,creature);
-    }
-    void removeFromPopulation (Creature creature){
 
-        creatureList.remove(creature);
+    public Species winSpecies (){
+        int maxCount=0;
+        Species win = null;
+        speciesList = new ArrayList<>();
+        speciesList.add(wolf);
+        speciesList.add(bird);
+        speciesList.add(cockroach);
+        speciesList.add(human);
+        speciesList.add(dinosaur);
+        speciesList.add(fish);
+
+        for (int i=0; i<speciesList.size(); i++){
+            if (getCreatureCount(speciesList.get(i))>maxCount){
+                maxCount=getCreatureCount(speciesList.get(i));
+                win = speciesList.get(i);
+            }
+        }
+        return win;
     }
 
     public List<Creature> getCreatureList() {
@@ -119,6 +129,8 @@ public class Simulation {
 
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
+        simulation.initSpecies();
+        simulation.simulationCycle();
         System.out.println("costam");
     }
     // yey
