@@ -17,8 +17,8 @@ public class Simulation {
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
-    private DefaultBreed defaultBreed = new DefaultBreed();
     private DefaultFight defaultFight = new DefaultFight();
+    private OtherBreed otherBreed = new OtherBreed();
 
     Species wolf = new Species(2,1,"Wolf", 1, 20);
     Species bird = new Species(10, 1, "Bird", 1, 20);
@@ -122,7 +122,7 @@ public class Simulation {
             }
             for(int i=0; i<creatureList.size(); i++)
             {
-                defaultBreed.breed(creatureList.get(i), creatureList, 12);
+                otherBreed.performBreeding(creatureList.get(i), creatureList, 12);
                 while(creatureList.get(i).getSpeed()!=0) {
                     defaultMovement.performSingleStep(creatureList.get(i), creatureList);
                 }
