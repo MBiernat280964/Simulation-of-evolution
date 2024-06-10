@@ -3,6 +3,7 @@ package simulation;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -124,6 +125,22 @@ public class Simulation {
                 }
             }
         }
+    }
+
+
+    /**
+     * functionvgenerateXY generates two random numbers, x and y, and puts them in an array
+     * seed is current computer time in milliseconds
+     * @return array with first index - x coordinate and second index - y coordinate
+     */
+    int[] generateXY() {
+        int[] xyTab = new int[2];
+        Random rand = new Random(/*System.currentTimeMillis()*/);
+        int n = rand.nextInt(100);
+        xyTab[0] = n;
+        n = rand.nextInt(100);
+        xyTab[1] = n;
+        return xyTab;
     }
 
     public static void main(String[] args) {
