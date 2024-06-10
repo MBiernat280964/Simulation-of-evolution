@@ -21,12 +21,12 @@ public class Simulation {
     private DefaultFight defaultFight = new DefaultFight();
     private OtherBreed otherBreed = new OtherBreed();
 
-    Species wolf = new Species(2,1,"Wolf", 4, 200);
-    Species bird = new Species(10, 1, "Bird", 8, 200);
-    Species cockroach = new Species(1, 1, "Cockroach", 2, 150);
-    Species human = new Species(3, 3, "Human", 4, 200);
-    Species dinosaur = new Species(1, 6, "Dinosaur", 2, 100);
-    Species fish = new Species(5, 1, "Fish", 8, 150);
+    Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
+    Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
+    Species cockroach = new Species(1, 1, "Cockroach", 2, 150, 'c');
+    Species human = new Species(3, 3, "Human", 4, 200, 'h');
+    Species dinosaur = new Species(1, 6, "Dinosaur", 2, 100, 'd');
+    Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
     Simulation(int years) {
         this.years = years;
         this.generateMap();

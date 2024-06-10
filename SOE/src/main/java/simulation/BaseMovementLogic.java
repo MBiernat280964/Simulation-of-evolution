@@ -8,6 +8,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
     private EnemyFoodUtility enemyFoodUtility;
     Random random = new Random();
 
+
     private int calculateDistance(Creature creature, Creature other){
         int dist = Math.abs(creature.getX() - other.getX()) + Math.abs(creature.getY() - other.getY());
         return dist;
@@ -135,6 +136,8 @@ public abstract class BaseMovementLogic implements MovementLogic{
             }
         }
         return true;
+       // if ()
+
     }
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList) {

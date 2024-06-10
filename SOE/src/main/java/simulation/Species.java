@@ -6,13 +6,15 @@ public class Species {
     private String name;
     private int breedingChance;
     private int maxPopulation;
+    private char character;
 
-    public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation) {
+    public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation, char character) {
         this.speed = speed;
         this.baseHp = baseHp;
         this.name = name;
         this.breedingChance = breedingChance;
         this.maxPopulation = maxPopulation;
+        this.character = character;
     }
 
     public int getSpeed() {
@@ -53,5 +55,13 @@ public class Species {
 
     public void setMaxPopulation(int maxPopulation) {
         this.maxPopulation = maxPopulation;
+    }
+
+    public char getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(char character) {
+        this.character = character;
     }
 }
