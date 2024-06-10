@@ -14,6 +14,7 @@ public class Simulation {
 
     private int years = 100;     // default: from user input
     Map map = new Map();
+    GUI gui = new GUI();
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
@@ -30,7 +31,6 @@ public class Simulation {
     Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
     Simulation(int years) {
         this.years = years;
-        this.generateMap();
     }
     private void initSpecies(){
         speciesList = new ArrayList<>();
@@ -68,9 +68,17 @@ public class Simulation {
         map.showMap();
     }
 
-    void updateMap(Creature creature) {
-        System.out.println("This method updates map");
+    void updateMap(List<Creature> creatureList) {
+        int x;
+        int y;
+        for (int i=0; i<creatureList.size(); i++){
+            x = creatureList.get(i).getX();
+            y = creatureList.get(i).getY();
+            map.map[1][x][y] = creatureList.get(i).getSpecies().getCharacter();
+        }
     }
+
+
 
     public int getCreatureCount(Species species){
         int count = 0;
@@ -102,8 +110,13 @@ public class Simulation {
         return win;
     }
 
-    public List<Creature> getCreatureList() {
-        return creatureList;
+    //TODO dodawanie do listy z gui
+    void firstAddToMap (){
+
+        for (int i=0; i< ; i++){
+            creatureList.add()
+        }
+
     }
 
     void simulationCycle()
@@ -116,14 +129,17 @@ public class Simulation {
             }
             for(int i=0; i<creatureList.size(); i++){
                 otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
+                map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
                 while(creatureList.get(i).getSpeed()!=0) {
-                    defaultMovement.performSingleStep(creatureList.get(i), creatureList, 'L' /*map.showMap()*/); //TODO x=createrList.get(i).getX() y=createrList.get(i).getY()
+                    defaultMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()] );
                 }
                 defaultFight.performAttack(creatureList.get(i), creatureList);
                 if (creatureList.get(i).getHp()==0){
+                    map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
                     creatureList.remove(i);
                 }
             }
+            updateMap(creatureList);
         }
     }
 
@@ -145,6 +161,7 @@ public class Simulation {
 
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
+        simulation.generateMap();
         simulation.initSpecies();
         simulation.simulationCycle();
     }
