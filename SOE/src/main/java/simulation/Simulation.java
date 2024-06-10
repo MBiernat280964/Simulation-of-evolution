@@ -131,9 +131,7 @@ public class Simulation {
         Simulation simulation = new Simulation(1);
         simulation.initSpecies();
         simulation.simulationCycle();
-        System.out.println("costam");
     }
-    // yey
 }
 
 
