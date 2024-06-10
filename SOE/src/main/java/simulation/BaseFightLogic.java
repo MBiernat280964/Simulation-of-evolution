@@ -37,11 +37,8 @@ public abstract class BaseFightLogic implements FightLogic{
         other.setHp(hp);
     }
 
-    private boolean isAttackPosible (Creature creature, List <Creature> creatureList){
-        if (creature.getHp()==0){
-            return false;
-        }
-        if (findEnemies(creature, creatureList).isEmpty()){
+    private boolean isAttackPossible (Creature creature, List <Creature> creatureList){
+        if (creature.getHp()==0 || findEnemies(creature, creatureList).isEmpty()){
             return false;
         }
         return true;
@@ -50,11 +47,10 @@ public abstract class BaseFightLogic implements FightLogic{
     @Override
     public boolean performAttack(Creature creature, List <Creature> creatureList) {
         for (int i=0; i<creatureList.size(); i++){
-            if (isAttackPosible(creature, creatureList)){
+            if (isAttackPossible(creature, creatureList)){
                 attack(chooseEnemy(creature, creatureList));
             }
         }
-        //TODO usuwanie z listy atakujących na kolejkę
         return false;
     }
 }

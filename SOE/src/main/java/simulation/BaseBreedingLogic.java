@@ -109,6 +109,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
                 creature.setBreedingEnabled(false);
                 secondParent.setBreedingEnabled(false);
                 baby.setBreedingEnabled(false);
+                baby.setSpeed(0);
                 creature.setSpeed(0);
                 secondParent.setSpeed(0);
             }

@@ -82,8 +82,8 @@ public abstract class BaseMovementLogic implements MovementLogic{
         Creature other;
         int x;
         int y;
-        int newCreaterX = creature.getX();
-        int newCreaterY = creature.getY();
+        int newCreatureX = creature.getX();
+        int newCreatureY = creature.getY();
 
         if(enemyDist<friendDist){
             other = friends.get(random.nextInt(friends.size()));
@@ -93,15 +93,15 @@ public abstract class BaseMovementLogic implements MovementLogic{
 
             if (i<5 && x!=0){
                 if (x<0){
-                    newCreaterX=creature.getX()-1;
+                    newCreatureX=creature.getX()-1;
                 } else {
-                    newCreaterX=creature.getX()+1;
+                    newCreatureX=creature.getX()+1;
                 }
             } else {
                 if (y<0){
-                    newCreaterY = creature.getY()-1;
+                    newCreatureY = creature.getY()-1;
                 } else if (y>0){
-                    newCreaterY=creature.getY()+1;
+                    newCreatureY=creature.getY()+1;
                 }
             }
 
@@ -113,24 +113,24 @@ public abstract class BaseMovementLogic implements MovementLogic{
 
             if (i<5 && x!=0){
                 if (x<0){
-                    newCreaterX=creature.getX()-1;
+                    newCreatureX=creature.getX()-1;
                 } else {
-                    newCreaterX=creature.getX()+1;
+                    newCreatureX=creature.getX()+1;
                 }
             } else {
                 if (y<0){
-                    newCreaterY = creature.getY()-1;
+                    newCreatureY = creature.getY()-1;
                 } else if (y>0){
-                    newCreaterY=creature.getY()+1;
+                    newCreatureY=creature.getY()+1;
                 }
             }
         }
-        int[] vector ={newCreaterX,newCreaterY};
+        int[] vector = {newCreatureX,newCreatureY};
         return vector;
     }
-    private boolean isMovePosible (Creature creature, List <Creature> creatureList){
+    private boolean isMovePossible (Creature creature, List <Creature> creatureList){
         for (int i=0; i<creatureList.size(); i++){
-            if (creatureList.get(i).getX()== chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]){
+            if (creatureList.get(i).getX() == chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]){
                 return false;
             }
         }
@@ -139,10 +139,11 @@ public abstract class BaseMovementLogic implements MovementLogic{
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList) {
         for(int i=0; i<creature.getSpecies().getSpeed(); i++){
-            if (isMovePosible(creature, creatureList)){
+            if (isMovePossible(creature, creatureList)){
                 creature.setX(chooseMoveDirection(creature, creatureList)[0]);
                 creature.setY(chooseMoveDirection(creature, creatureList)[1]);
-            } //    TODO usuwa mi speeda przypadkiem, ups
+                creature.setSpeed(creature.getSpeed()-1);
+            }
         }
     }
 }
