@@ -129,20 +129,19 @@ public abstract class BaseMovementLogic implements MovementLogic{
         int[] vector = {newCreatureX,newCreatureY};
         return vector;
     }
-    private boolean isMovePossible (Creature creature, List <Creature> creatureList){
+    private boolean isMovePossible (Creature creature, List <Creature> creatureList, char landOrWater){
         for (int i=0; i<creatureList.size(); i++){
-            if (creatureList.get(i).getX() == chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]){
+            if ((creatureList.get(i).getX() == chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]) || landOrWater == 'W'){
                 return false;
             }
         }
         return true;
-       // if ()
 
     }
     @Override
-    public void performSingleStep(Creature creature, List<Creature> creatureList) {
+    public void performSingleStep(Creature creature, List<Creature> creatureList, char landOrWater) {
         for(int i=0; i<creature.getSpecies().getSpeed(); i++){
-            if (isMovePossible(creature, creatureList)){
+            if (isMovePossible(creature, creatureList, landOrWater)){
                 creature.setX(chooseMoveDirection(creature, creatureList)[0]);
                 creature.setY(chooseMoveDirection(creature, creatureList)[1]);
                 creature.setSpeed(creature.getSpeed()-1);

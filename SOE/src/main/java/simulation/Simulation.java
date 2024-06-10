@@ -13,6 +13,7 @@ import java.util.Random;
 public class Simulation {
 
     private int years = 100;     // default: from user input
+    Map map = new Map();
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
@@ -64,7 +65,6 @@ public class Simulation {
     }
 
     void generateMap (){
-        Map map = new Map();
         map.showMap();
     }
 
@@ -117,7 +117,7 @@ public class Simulation {
             for(int i=0; i<creatureList.size(); i++){
                 otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 while(creatureList.get(i).getSpeed()!=0) {
-                    defaultMovement.performSingleStep(creatureList.get(i), creatureList);
+                    defaultMovement.performSingleStep(creatureList.get(i), creatureList, 'L'/*map.showMap()*/);
                 }
                 defaultFight.performAttack(creatureList.get(i), creatureList);
                 if (creatureList.get(i).getHp()==0){
