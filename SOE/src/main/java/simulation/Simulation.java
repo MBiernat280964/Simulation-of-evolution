@@ -65,7 +65,7 @@ public class Simulation {
     }
 
     void generateMap (){
-        map.showMap();
+        map.showMap(); //TODO generowanie mapy, pokazanie jej na początku i na końcu
     }
 
     void updateMap(List<Creature> creatureList) {
@@ -110,13 +110,24 @@ public class Simulation {
         return win;
     }
 
-    //TODO dodawanie do listy z gui
-    void firstAddToMap (){
-
-        for (int i=0; i< ; i++){
-            creatureList.add()
+    void initCreature (Species species){
+        for (int i=0; i<gui.mapOfCreatures.get(species.getCharacter()).intValue() ; i++){
+            Creature creature = new Creature(wolf);
+            creatureList.add(creature);
+            do {
+                generateXY(creature);
+            } while (!isFree(creature, creatureList));
         }
+    }
 
+    void firstAddToMap (){
+        initCreature(wolf);
+        initCreature(bird);
+        initCreature(cockroach);
+        initCreature(human);
+        initCreature(fish);
+        initCreature(dinosaur);
+        updateMap(creatureList);
     }
 
     void simulationCycle()
@@ -149,20 +160,34 @@ public class Simulation {
      * seed is current computer time in milliseconds
      * @return array with first index - x coordinate and second index - y coordinate
      */
-    int[] generateXY() {
-        int[] xyTab = new int[2];
+    void generateXY(Creature creature) {
+        int x;
+        int y;
         Random rand = new Random(/*System.currentTimeMillis()*/);
         int n = rand.nextInt(100);
-        xyTab[0] = n;
+        x = n;
         n = rand.nextInt(100);
-        xyTab[1] = n;
-        return xyTab;
+        y = n;
+
+        creature.setX(x);
+        creature.setY(y);
+    }
+
+    private boolean isFree (Creature creature, List <Creature> creatureList){
+        for (int i=0; i<creatureList.size(); i++){
+            if ((creatureList.get(i).getX() == creature.getX() && creatureList.get(i).getY()== creature.getY())){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     public static void main(String[] args) {
         Simulation simulation = new Simulation(1);
-        simulation.generateMap();
         simulation.initSpecies();
+        simulation.generateMap();
+        simulation.firstAddToMap();
         simulation.simulationCycle();
     }
 }
