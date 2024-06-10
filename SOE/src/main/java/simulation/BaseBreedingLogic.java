@@ -11,7 +11,8 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
 
     protected boolean isBreedingEnabled(Creature creature, List<Creature> creatureList) {
         for (int i=0; i<creatureList.size(); i++){
-            if (creatureList.get(i).getX()== chooseBreedingSpot(creature, creatureList)[0] && creatureList.get(i).getY()==chooseBreedingSpot(creature, creatureList)[1]){
+            if (creatureList.get(i).getX()== chooseBreedingSpot(creature, creatureList)[0] &&
+                    creatureList.get(i).getY()==chooseBreedingSpot(creature, creatureList)[1]){
                 return false;
             }
         }
@@ -36,26 +37,25 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
         int x;
         int y;
 
-        if(random.nextInt(10)<10 && creature.getX()!=0 || creature.getX()==100){
+        if(creature.getX()!=0){
             x=creature.getX()-1;
         } else{
             x=creature.getX()+1;
         }
 
-        if(random.nextInt(10)<10 && creature.getY()!=0 || creature.getY()==100){
+        if(creature.getY()!=0){
             y=creature.getY()-1;
         } else{
             y=creature.getY()+1;
         }
-        int[] spot ={x,y};
-        return spot;
+        return new int[]{x,y};
     }
 
     protected boolean isEnemyNear(Creature creature, List<Creature> creatureList) {
-        for(int i = 0; i < creatureList.size(); i++){
-            if (enemyFoodUtility.isEnemy(creature, creatureList.get(i))) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - creatureList.get(i).getX(), 2) + Math.pow(creature.getY() - creatureList.get(i).getY(), 2));
-                if(dist <= Math.sqrt(8)){
+        for (Creature value : creatureList) {
+            if (enemyFoodUtility.isEnemy(creature, value)) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
+                if (dist <= Math.sqrt(8)) {
                     return true;
                 }
             }
@@ -64,10 +64,10 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     }
 
     protected boolean isPartnerNear(Creature creature, List<Creature> creatureList) {
-        for(int i = 0; i < creatureList.size(); i++){
-            if (creature.getSpecies()==creatureList.get(i).getSpecies()) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - creatureList.get(i).getX(), 2) + Math.pow(creature.getY() - creatureList.get(i).getY(), 2));
-                if(dist <= Math.sqrt(2)){
+        for (Creature value : creatureList) {
+            if (creature.getSpecies() == value.getSpecies()) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
+                if (dist <= Math.sqrt(2)) {
                     return true;
                 }
             }
@@ -76,28 +76,22 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     }
 
     protected boolean isMaxPopulationReached(Creature creature, int populationCount) {
-        if (populationCount==creature.getSpecies().getMaxPopulation()){
-            return true;
-        }
-        return false;
+        return populationCount == creature.getSpecies().getMaxPopulation();
     }
 
     protected boolean drawBreedingChance(Creature creature) {
-        if (random.nextInt(creature.getSpecies().getBreedingChance())<creature.getSpecies().getBreedingChance()/2){
-            return true;
-        }
-        return false;
+        return random.nextInt(creature.getSpecies().getBreedingChance()) < creature.getSpecies().getBreedingChance() / 2;
     }
 
     private Creature chooseSecondParent (Creature creature, List<Creature> creatureList){
         Creature secondParent;
         List<Creature> potentialParents = new ArrayList<Creature>();
-        for(int i = 0; i < creatureList.size(); i++){
-            if (creature.getSpecies()==creatureList.get(i).getSpecies()) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - creatureList.get(i).getX(), 2) + Math.pow(creature.getY() - creatureList.get(i).getY(), 2));
-                if(dist <= Math.sqrt(2)){
-                    if(creatureList.get(i).isBreedingEnabled())
-                        potentialParents.add(creatureList.get(i));
+        for (Creature value : creatureList) {
+            if (creature.getSpecies() == value.getSpecies()) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
+                if (dist <= Math.sqrt(2)) {
+                    if (value.isBreedingEnabled())
+                        potentialParents.add(value);
                 }
             }
         }
@@ -122,7 +116,11 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     }
     @Override
     public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount) {
-        if (isEmptySpotAround(creature, creatureList) && !isEnemyNear(creature, creatureList) && isPartnerNear(creature, creatureList) && drawBreedingChance(creature) && !isMaxPopulationReached(creature, populationCount)){
+        if (isEmptySpotAround(creature, creatureList) &&
+                !isEnemyNear(creature, creatureList) &&
+                isPartnerNear(creature, creatureList) &&
+                drawBreedingChance(creature) &&
+                !isMaxPopulationReached(creature, populationCount)){
             breed(creature, chooseSecondParent(creature, creatureList), creatureList);
         }
     }
