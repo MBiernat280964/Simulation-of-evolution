@@ -60,15 +60,16 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                mapOfCreatures.put('W', (Integer) l1.getValue());
-                mapOfCreatures.put('H', (Integer) l2.getValue());
-                mapOfCreatures.put('C', (Integer) l3.getValue());
-                mapOfCreatures.put('D', (Integer) l4.getValue());
-                mapOfCreatures.put('B', (Integer) l5.getValue());
-                mapOfCreatures.put('F', (Integer) l6.getValue());
+                mapOfCreatures.put((Character) 'w', (Integer) l1.getValue());
+                mapOfCreatures.put((Character)'h', (Integer) l2.getValue());
+                mapOfCreatures.put((Character) 'c', (Integer) l3.getValue());
+                mapOfCreatures.put((Character) 'd', (Integer) l4.getValue());
+                mapOfCreatures.put((Character) 'b', (Integer) l5.getValue());
+                mapOfCreatures.put((Character) 'f', (Integer) l6.getValue());
+
 
                 dispose();
-                Simulation.main(null);
+                Simulation.main(mapOfCreatures, mapName);
             }
         });
         //this.getContentPane().setBackground(Color.BLUE);
