@@ -1,6 +1,5 @@
 package simulation;
 
-import java.util.*;
 import java.lang.Math;
 
 /**
@@ -14,10 +13,16 @@ public class Map {
 
     char [][][] map = new char [2][sizeOfMap][sizeOfMap];
 
+    /**
+     * Constructor for Map class
+     */
     public Map() {
         this.genMapRiver();
     }
 
+    /**
+     * Prints map containing chosen biome and currently population of creatures
+     */
     void showMap() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
@@ -33,6 +38,9 @@ public class Map {
         }
     }
 
+    /**
+     * Generates map biome: lake
+     */
     void genMapLake() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
@@ -46,7 +54,9 @@ public class Map {
             }
         }
     }
-
+    /**
+     * Generates map biome: river
+     */
     void genMapRiver() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
@@ -61,7 +71,9 @@ public class Map {
             }
         }
     }
-
+    /**
+     * Generates map biome: island
+     */
     void genMapIsland() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
