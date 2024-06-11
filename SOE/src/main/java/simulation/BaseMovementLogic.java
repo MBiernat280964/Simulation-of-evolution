@@ -143,7 +143,6 @@ public abstract class BaseMovementLogic implements MovementLogic{
             if (isMovePossible(creature, creatureList, landOrWater)){
                 creature.setX(chooseMoveDirection(creature, creatureList)[0]);
                 creature.setY(chooseMoveDirection(creature, creatureList)[1]);
-                creature.setSpeed(creature.getSpeed()-1);
             }
         }
     }

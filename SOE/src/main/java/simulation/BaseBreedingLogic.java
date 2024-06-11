@@ -144,8 +144,8 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
                 }
             }
         }
-        if (potentialParents != null) {
-            secondParent= potentialParents.get(0);
+        if (!potentialParents.isEmpty()) {
+            secondParent = potentialParents.get(0);
             return secondParent;
         }
         return creature;

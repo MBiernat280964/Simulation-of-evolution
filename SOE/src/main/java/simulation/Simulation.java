@@ -14,7 +14,7 @@ import java.util.Random;
 public class Simulation {
 
     private int years = 100;     // default: from user input
-    Map map = new Map();
+    Map map = new Map("Riverside");
     HashMap<Character, Integer> mapOfCreatures;
     String mapName;
 
@@ -151,16 +151,16 @@ public class Simulation {
 
     void simulationCycle()
     {
-        int year = 0;
-        while (year < this.years) {
-            for(int i=0; i<creatureList.size(); i++) {
-                creatureList.get(i).setSpeed(creatureList.get(i).getSpecies().getSpeed());
-                creatureList.get(i).setHp(creatureList.get(i).getSpecies().getBaseHp());
+        for (int year=0; year < this.years; year++) {
+            for (Creature creature : creatureList) {
+                creature.setSpeed(creature.getSpecies().getSpeed());
+                creature.setHp(creature.getSpecies().getBaseHp());
             }
             for(int i=0; i<creatureList.size(); i++){
                 otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
                 while(creatureList.get(i).getSpeed()!=0) {
+                    creatureList.get(i).setSpeed(creatureList.get(i).getSpeed() - 1);
                     defaultMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()] );
                 }
                 defaultFight.performAttack(creatureList.get(i), creatureList);
@@ -170,7 +170,6 @@ public class Simulation {
                 }
             }
             updateMap(creatureList);
-            year++;
         }
     }
 
@@ -204,7 +203,7 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(2, mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(5, mapCrFromGUI, mapNameFromGUI);
         simulation.initSpecies();
         simulation.firstAddToMap();
         simulation.generateMap();

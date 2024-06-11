@@ -6,16 +6,16 @@ import java.util.Random;
 
 public abstract class BaseFightLogic implements FightLogic{
 
-    EnemyFoodUtility enemyFoodUtility;
+    EnemyFoodUtility enemyFoodUtility = new EnemyFoodUtility();
     Random random = new Random();
 
     private List<Creature> findEnemies (Creature creature, List<Creature> creatureList){
         List<Creature> results = new ArrayList<>();
-        for(int i = 0; i < creatureList.size(); i++){
-            if (enemyFoodUtility.isEnemy(creature, creatureList.get(i))) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - creatureList.get(i).getX(), 2) + Math.pow(creature.getY() - creatureList.get(i).getY(), 2));
-                if(dist <= Math.sqrt(2)){
-                    results.add(creatureList.get(i));
+        for (Creature value : creatureList) {
+            if (enemyFoodUtility.isEnemy(creature, value)) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
+                if (dist <= Math.sqrt(2)) {
+                    results.add(value);
                 }
             }
         }
