@@ -14,9 +14,8 @@ import java.util.Random;
 public class Simulation {
 
     private int years = 100;     // default: from user input
-    Map map = new Map("Riverside");
     HashMap<Character, Integer> mapOfCreatures;
-    String mapName;
+    String mapName = "lake";
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
@@ -36,6 +35,7 @@ public class Simulation {
         this.mapOfCreatures = mapOfCreatures;
         this.mapName = mapName;
     }
+    Map map;
     private void initSpecies(){
         speciesList = new ArrayList<>();
         speciesList.add(wolf);
@@ -204,6 +204,7 @@ public class Simulation {
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
         Simulation simulation = new Simulation(5, mapCrFromGUI, mapNameFromGUI);
+        simulation.map = new Map(simulation.mapName);
         simulation.initSpecies();
         simulation.firstAddToMap();
         simulation.generateMap();

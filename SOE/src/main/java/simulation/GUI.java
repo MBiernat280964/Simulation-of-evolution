@@ -53,7 +53,7 @@ public class GUI extends JFrame {
         lake.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mapName = "seaside";
+                mapName = "lake";
             }
         });
         button.addActionListener(new ActionListener() {
