@@ -2,6 +2,7 @@ package simulation;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -14,14 +15,15 @@ public class Simulation {
 
     private int years = 100;     // default: from user input
     Map map = new Map();
-    GUI gui = new GUI();
+    HashMap<Character, Integer> mapOfCreatures;
+    String mapName;
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
     private DefaultFight defaultFight = new DefaultFight();
-    private OtherBreed otherBreed = new OtherBreed(); //TODO creatureList.get(i).getSpecies().getCharacter
+    private OtherBreed otherBreed = new OtherBreed();
 
     Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
     Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
@@ -29,8 +31,10 @@ public class Simulation {
     Species human = new Species(3, 3, "Human", 4, 200, 'h');
     Species dinosaur = new Species(1, 6, "Dinosaur", 2, 100, 'd');
     Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
-    Simulation(int years) {
+    Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
+        this.mapOfCreatures = mapOfCreatures;
+        this.mapName = mapName;
     }
     private void initSpecies(){
         speciesList = new ArrayList<>();
@@ -65,7 +69,7 @@ public class Simulation {
     }
 
     void generateMap (){
-        map.showMap(); //TODO generowanie mapy, pokazanie jej na początku i na końcu
+        map.showMap();
     }
 
     void updateMap(List<Creature> creatureList) {
@@ -110,20 +114,35 @@ public class Simulation {
         return win;
     }
 
+    private boolean canBeHere (Species species, Creature creature){
+        if (species == bird) {
+            System.out.println("Bird");
+            return true;
+        } else if (species == fish && this.map.map[0][creature.getX()][creature.getY()] == 'W') {
+            System.out.println("Fish");
+            return true;
+        } else if ((species == wolf || species == human || species == cockroach || species == dinosaur) && this.map.map[0][creature.getX()][creature.getY()] == 'L'){
+            System.out.println("Other");
+            return true;
+        }
+        return false;
+    }
+
     void initCreature (Species species){
-        for (int i=0; i<gui.mapOfCreatures.get(species.getCharacter()).intValue() ; i++){
-            Creature creature = new Creature(wolf);
+        for (int i=0; i<mapOfCreatures.get(Character.valueOf(species.getCharacter())).intValue() ; i++){
+            Creature creature = new Creature(species);
             creatureList.add(creature);
             do {
                 generateXY(creature);
-            } while (!isFree(creature, creatureList));
+                System.out.println(creature.getX() + " " + creature.getY() + " " + creature.getSpecies().getName());
+            } while (!isFree(creature,this.creatureList) && !canBeHere(species, creature));
         }
     }
 
     void firstAddToMap (){
         initCreature(wolf);
         initCreature(bird);
-        initCreature(cockroach);
+        initCreature(cockroach); //TODO nie wyświetlają się zwierzęta oprócz wilka i diono
         initCreature(human);
         initCreature(fish);
         initCreature(dinosaur);
@@ -183,11 +202,11 @@ public class Simulation {
 
     }
 
-    public static void main(String[] args) {
-        Simulation simulation = new Simulation(1);
+    public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
+        Simulation simulation = new Simulation(1, mapCrFromGUI, mapNameFromGUI);
         simulation.initSpecies();
-        simulation.generateMap();
         simulation.firstAddToMap();
+        simulation.generateMap();
         simulation.simulationCycle();
     }
 }
