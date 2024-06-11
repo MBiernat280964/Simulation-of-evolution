@@ -183,7 +183,7 @@ public class Simulation {
     void generateXY(Creature creature) {
         int x;
         int y;
-        Random rand = new Random(System.currentTimeMillis());
+        Random rand = new Random();
         int n = rand.nextInt(100);
         x = n;
         n = rand.nextInt(100);
