@@ -68,15 +68,15 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-    private int[] chooseMoveDirection (Creature creature, List<Creature> creatureList){
+    private int[] chooseMoveDirection (Creature creature, List<Creature> creatureList) {
         int enemyDist = Integer.MAX_VALUE;
-        List <Creature> enemies = findNearestEnemies(creature, creatureList);
-        if(!enemies.isEmpty()) {
+        List<Creature> enemies = findNearestEnemies(creature, creatureList);
+        if (!enemies.isEmpty()) {
             enemyDist = calculateDistance(creature, enemies.get(0));
         }
         int friendDist = Integer.MAX_VALUE;
-        List <Creature> friends = findNearestFriends(creature, creatureList);
-        if(!friends.isEmpty()){
+        List<Creature> friends = findNearestFriends(creature, creatureList);
+        if (!friends.isEmpty()) {
             friendDist = calculateDistance(creature, friends.get(0));
         }
 
@@ -85,48 +85,46 @@ public abstract class BaseMovementLogic implements MovementLogic{
         int y;
         int newCreatureX = creature.getX();
         int newCreatureY = creature.getY();
-
-        if(enemyDist<friendDist && friends != null){
+        if (enemyDist < friendDist && !friends.isEmpty()) {
             other = friends.get(0);
-            x= other.getX() - creature.getX();
-            y= other.getY() - creature.getY();
+            x = other.getX() - creature.getX();
+            y = other.getY() - creature.getY();
             int i = random.nextInt(10);
 
-            if (i<5 && x!=0){
-                if (x<0){
-                    newCreatureX=creature.getX()-1;
+            if (i < 5 && x != 0) {
+                if (x < 0) {
+                    newCreatureX = creature.getX() - 1;
                 } else {
-                    newCreatureX=creature.getX()+1;
+                    newCreatureX = creature.getX() + 1;
                 }
             } else {
-                if (y<0){
-                    newCreatureY = creature.getY()-1;
-                } else if (y>0){
-                    newCreatureY=creature.getY()+1;
+                if (y < 0) {
+                    newCreatureY = creature.getY() - 1;
+                } else if (y > 0) {
+                    newCreatureY = creature.getY() + 1;
                 }
             }
 
-        } else if (enemies != null) {
-            other = enemies.get(0);
-            //other = enemies.get(random.nextInt(enemies.size()));
-            x= creature.getX() - other.getX();
-            y= creature.getY() - other.getY();
+        } else if (!enemies.isEmpty()) {
+            other = enemies.get(random.nextInt(enemies.size()));
+            x = creature.getX() - other.getX();
+            y = creature.getY() - other.getY();
             int i = random.nextInt(8);
-
-            if (i<5 && x!=0){
-                if (x<0){
-                    newCreatureX=creature.getX()-1;
+            if (i < 5 && x != 0) {
+                if (x < 0) {
+                    newCreatureX = creature.getX() - 1;
                 } else {
-                    newCreatureX=creature.getX()+1;
+                    newCreatureX = creature.getX() + 1;
                 }
             } else {
-                if (y<0){
-                    newCreatureY = creature.getY()-1;
-                } else if (y>0){
-                    newCreatureY=creature.getY()+1;
+                if (y < 0) {
+                    newCreatureY = creature.getY() - 1;
+                } else if (y > 0) {
+                    newCreatureY = creature.getY() + 1;
                 }
             }
         }
+
         int[] vector = {newCreatureX,newCreatureY};
         return vector;
     }

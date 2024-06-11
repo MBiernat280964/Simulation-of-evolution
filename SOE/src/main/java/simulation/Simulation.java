@@ -33,7 +33,6 @@ public class Simulation {
     Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
-        
         this.mapOfCreatures = mapOfCreatures;
         this.mapName = mapName;
     }
@@ -132,18 +131,18 @@ public class Simulation {
     void initCreature (Species species){
         for (int i=0; i<mapOfCreatures.get(Character.valueOf(species.getCharacter())).intValue() ; i++){
             Creature creature = new Creature(species);
-            creatureList.add(creature);
+            this.creatureList.add(creature);
             do {
                 generateXY(creature);
-                System.out.println(creature.getX() + " " + creature.getY() + " " + creature.getSpecies().getName());
             } while (!isFree(creature,this.creatureList) && !canBeHere(species, creature));
+            System.out.println(creature.getX() + " " + creature.getY() + " " + creature.getSpecies().getName());
         }
     }
 
     void firstAddToMap (){
         initCreature(wolf);
         initCreature(bird);
-        initCreature(cockroach); //TODO nie wyświetlają się zwierzęta oprócz wilka i diono
+        initCreature(cockroach);
         initCreature(human);
         initCreature(fish);
         initCreature(dinosaur);
@@ -152,8 +151,8 @@ public class Simulation {
 
     void simulationCycle()
     {
-        int years = 0;
-        while (years < this.years) {
+        int year = 0;
+        while (year < this.years) {
             for(int i=0; i<creatureList.size(); i++) {
                 creatureList.get(i).setSpeed(creatureList.get(i).getSpecies().getSpeed());
                 creatureList.get(i).setHp(creatureList.get(i).getSpecies().getBaseHp());
@@ -171,6 +170,7 @@ public class Simulation {
                 }
             }
             updateMap(creatureList);
+            year++;
         }
     }
 
@@ -183,7 +183,7 @@ public class Simulation {
     void generateXY(Creature creature) {
         int x;
         int y;
-        Random rand = new Random(/*System.currentTimeMillis()*/);
+        Random rand = new Random(System.currentTimeMillis());
         int n = rand.nextInt(100);
         x = n;
         n = rand.nextInt(100);
@@ -195,7 +195,7 @@ public class Simulation {
 
     private boolean isFree (Creature creature, List <Creature> creatureList){
         for (int i=0; i<creatureList.size(); i++){
-            if ((creatureList.get(i).getX() == creature.getX() && creatureList.get(i).getY()== creature.getY())){
+            if ((creatureList.get(i).getX() == creature.getX() && creatureList.get(i).getY() == creature.getY())){
                 return false;
             }
         }
@@ -204,11 +204,15 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(1, mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(2, mapCrFromGUI, mapNameFromGUI);
         simulation.initSpecies();
         simulation.firstAddToMap();
         simulation.generateMap();
         simulation.simulationCycle();
+        for (int i=0; i<simulation.creatureList.size();i++){
+            System.out.println(simulation.creatureList.get(i).getX() + " " + simulation.creatureList.get(i).getY() + " " + simulation.creatureList.get(i).getSpecies().getName());
+        }
+        simulation.generateMap();
     }
 }
 
