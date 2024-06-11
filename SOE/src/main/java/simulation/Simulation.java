@@ -211,7 +211,7 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(5, mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(20, mapCrFromGUI, mapNameFromGUI);
         simulation.map = new Map(simulation.mapName);
         simulation.initSpecies();
         simulation.firstAddToMap();
