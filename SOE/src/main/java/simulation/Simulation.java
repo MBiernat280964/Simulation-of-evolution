@@ -33,6 +33,7 @@ public class Simulation {
     Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
+        
         this.mapOfCreatures = mapOfCreatures;
         this.mapName = mapName;
     }
