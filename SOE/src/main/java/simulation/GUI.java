@@ -72,7 +72,7 @@ public class GUI extends JFrame {
                 Simulation.main(mapOfCreatures, mapName);
             }
         });
-        //this.getContentPane().setBackground(Color.BLUE);
+        this.getContentPane().setBackground(Color.PINK);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         this.getContentPane().setLayout(layout);
