@@ -21,8 +21,10 @@ public class Simulation {
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
+    private OtherMovement fishMovement = new OtherMovement();
     private DefaultFight defaultFight = new DefaultFight();
     private OtherBreed otherBreed = new OtherBreed();
+    private BirdMovement birdMovement = new BirdMovement ();
 
     Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
     Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
@@ -161,7 +163,13 @@ public class Simulation {
                 map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
                 while(creatureList.get(i).getSpeed()!=0) {
                     creatureList.get(i).setSpeed(creatureList.get(i).getSpeed() - 1);
-                    defaultMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()] );
+                    if (creatureList.get(i).getSpecies() == fish) {
+                        fishMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()]);
+                    } else if (creatureList.get(i).getSpecies() == bird) {
+                        birdMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()]);
+                    } else {
+                        defaultMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()]);
+                    }
                 }
                 defaultFight.performAttack(creatureList.get(i), creatureList);
                 if (creatureList.get(i).getHp()==0){

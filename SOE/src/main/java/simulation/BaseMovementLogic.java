@@ -6,7 +6,7 @@ import java.util.Random;
 
 public abstract class BaseMovementLogic implements MovementLogic{
     private EnemyFoodUtility enemyFoodUtility;
-    Random random = new Random(System.currentTimeMillis());
+    Random random = new Random();
 
 
     private int calculateDistance(Creature creature, Creature other){
@@ -79,7 +79,6 @@ public abstract class BaseMovementLogic implements MovementLogic{
         if (!friends.isEmpty()) {
             friendDist = calculateDistance(creature, friends.get(0));
         }
-
         Creature other;
         int x;
         int y;
@@ -91,10 +90,10 @@ public abstract class BaseMovementLogic implements MovementLogic{
             y = other.getY() - creature.getY();
             int i = random.nextInt(10);
 
-            if (i < 5 && x != 0) {
+            if (i < 5) {
                 if (x < 0) {
                     newCreatureX = creature.getX() - 1;
-                } else {
+                } else  if (x>0){
                     newCreatureX = creature.getX() + 1;
                 }
             } else {
@@ -123,27 +122,33 @@ public abstract class BaseMovementLogic implements MovementLogic{
                     newCreatureY = creature.getY() + 1;
                 }
             }
+        } else {
+            if (creature.getX()<99) {
+                newCreatureX = creature.getX() + 1;
+            } else if (creature.getY()<99) {
+                newCreatureY = creature.getY() + 1;
+            }
         }
 
         int[] vector = {newCreatureX,newCreatureY};
         return vector;
     }
-    private boolean isMovePossible (Creature creature, List <Creature> creatureList, char landOrWater){
+    private boolean isMovePossible (List <Creature> creatureList, int[] tab, char landOrWater){
         for (int i=0; i<creatureList.size(); i++){
-            if ((creatureList.get(i).getX() == chooseMoveDirection(creature, creatureList)[0] && creatureList.get(i).getY()==chooseMoveDirection(creature, creatureList)[1]) || landOrWater == 'W'){
+            if ((creatureList.get(i).getX() == tab[0] && creatureList.get(i).getY()== tab[1]) || landOrWater == 'W'){
                 return false;
             }
         }
         return true;
-
     }
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList, char landOrWater) {
-        for(int i=0; i<creature.getSpecies().getSpeed(); i++){
-            if (isMovePossible(creature, creatureList, landOrWater)){
-                creature.setX(chooseMoveDirection(creature, creatureList)[0]);
-                creature.setY(chooseMoveDirection(creature, creatureList)[1]);
-            }
+        int[] tab = {chooseMoveDirection(creature, creatureList)[0], chooseMoveDirection(creature, creatureList)[1]};
+            if (!isMovePossible(creatureList, tab, landOrWater)) {
+                tab[0] = chooseMoveDirection(creature, creatureList)[0];
+                tab[1] = chooseMoveDirection(creature, creatureList)[1];
         }
+        creature.setX(tab[0]);
+        creature.setY(tab[1]);
     }
 }
