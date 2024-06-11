@@ -6,7 +6,7 @@ import java.util.Random;
 
 public abstract class BaseMovementLogic implements MovementLogic{
     private EnemyFoodUtility enemyFoodUtility;
-    Random random = new Random();
+    Random random = new Random(System.currentTimeMillis());
 
 
     private int calculateDistance(Creature creature, Creature other){
@@ -18,7 +18,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
         int maxDistanceToEnemy = Integer.MAX_VALUE;
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
-            if (enemyFoodUtility.isEnemy(creature, creatureList.get(i))) {
+            if (enemyFoodUtility!= null && enemyFoodUtility.isEnemy(creature, creatureList.get(i))) {
                 int dist =  calculateDistance(creature, creatureList.get(i));
                 if(dist < maxDistanceToEnemy){
                     maxDistanceToEnemy = dist;
@@ -86,8 +86,8 @@ public abstract class BaseMovementLogic implements MovementLogic{
         int newCreatureX = creature.getX();
         int newCreatureY = creature.getY();
 
-        if(enemyDist<friendDist){
-            other = friends.get(random.nextInt(friends.size()));
+        if(enemyDist<friendDist && friends != null){
+            other = friends.get(0);
             x= other.getX() - creature.getX();
             y= other.getY() - creature.getY();
             int i = random.nextInt(10);
@@ -106,8 +106,9 @@ public abstract class BaseMovementLogic implements MovementLogic{
                 }
             }
 
-        } else {
-            other = enemies.get(random.nextInt(enemies.size()));
+        } else if (enemies != null) {
+            other = enemies.get(0);
+            //other = enemies.get(random.nextInt(enemies.size()));
             x= creature.getX() - other.getX();
             y= creature.getY() - other.getY();
             int i = random.nextInt(8);

@@ -144,8 +144,11 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
                 }
             }
         }
-        secondParent= potentialParents.get(random.nextInt(potentialParents.size()));
-        return secondParent;
+        if (potentialParents != null) {
+            secondParent= potentialParents.get(0);
+            return secondParent;
+        }
+        return creature;
     }
     /**
      * Performs the breeding behavior; creates another creature of the same species
