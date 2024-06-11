@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 /**
- * Object <code>GUI</code> handles the user interface
+ * Object <code>GUI</code> handles the user interface at the start of the simulation
  */
 
 public class GUI extends JFrame {
@@ -37,7 +37,7 @@ public class GUI extends JFrame {
     public void initComponents() {
         biomes.add(island);
         biomes.add(riverside);
-        biomes.add(seaside);
+        biomes.add(lake);
         island.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,7 +50,7 @@ public class GUI extends JFrame {
                 mapName = "riverside";
             }
         });
-        seaside.addActionListener(new ActionListener() {
+        lake.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mapName = "seaside";
@@ -123,7 +123,7 @@ public class GUI extends JFrame {
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(island, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(seaside, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lake, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(riverside, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addGap(46, 46, 46))
@@ -162,7 +162,7 @@ public class GUI extends JFrame {
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(island)
-                                        .addComponent(seaside)
+                                        .addComponent(lake)
                                         .addComponent(riverside))
                                 .addGap(103, 103, 103)
                                 .addComponent(button)
@@ -175,7 +175,7 @@ public class GUI extends JFrame {
     //components
     JRadioButton island = new JRadioButton("Island");
     JRadioButton riverside = new JRadioButton("Riverside");
-    JRadioButton seaside = new JRadioButton("Seaside");
+    JRadioButton lake = new JRadioButton("Lake");
     ButtonGroup biomes = new ButtonGroup();
     JButton button = new JButton("START");
     JLabel label1 = new JLabel("Please choose number of creatures in the beginning of simulation:");

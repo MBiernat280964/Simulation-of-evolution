@@ -3,10 +3,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-
+/**
+ * Object <code>EndingWindow</code> handles the user interface at the end of the simulation
+ */
 public class EndingWindow extends JFrame {
     String winner;
     HashMap<Character, Integer> mapOfCreatures = new HashMap<>();
+
+    /**
+     * constructor taking two parameters
+     * @param mapOfCreatures map with key value pairs, key is a char - first lowercase letter of creature name, value is number of creatures
+     * @param winner name of the creature with the highest population after inputted number of simulation cycles
+     */
     EndingWindow(HashMap<Character, Integer> mapOfCreatures, String winner)
     {
         this.winner = winner;
@@ -29,6 +37,11 @@ public class EndingWindow extends JFrame {
         this.getContentPane().setBackground(Color.PINK);
     }
 
+    /**
+     * Contains and initializes all the components placed in GUI frame
+     * Sets GroupLayout for frame
+     * Called out in the constructor
+     */
     public void initComponents()
     {
         GroupLayout layout = new GroupLayout(getContentPane());
