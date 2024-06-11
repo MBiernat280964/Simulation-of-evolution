@@ -16,8 +16,18 @@ public class Map {
     /**
      * Constructor for Map class
      */
-    public Map() {
-        this.genMapRiver();
+    public Map(String biome) {
+        this.chooseGenerator(biome);
+    }
+
+    void chooseGenerator(String biome) {
+        if (biome.equals("riverside")) {
+            this.genMapRiver();
+        } else if (biome.equals("lake")) {
+            this.genMapLake();
+        } else if (biome.equals("island")) {
+            this.genMapIsland();
+        }
     }
 
     /**
