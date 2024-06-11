@@ -18,6 +18,7 @@ public class GUI extends JFrame {
 
         this.setDefaultCloseOperation(3);
         this.setVisible(true);
+        this.setResizable(false);
 
         this.setSize(widthh / 10, heightt / 2);
         int frameWidth = this.getSize().width;
