@@ -21,8 +21,10 @@ public class Simulation {
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
+    private OtherMovement fishMovement = new OtherMovement();
     private DefaultFight defaultFight = new DefaultFight();
     private OtherBreed otherBreed = new OtherBreed();
+    private BirdMovement birdMovement = new BirdMovement ();
 
     Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
     Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
@@ -66,6 +68,10 @@ public class Simulation {
         enemyFoodMapping.addFood(human , bird);
         enemyFoodMapping.addFood(dinosaur , fish);
         enemyFoodMapping.addFood(fish , cockroach);
+
+        defaultMovement.setEnemyFoodUtility(enemyFoodMapping);
+        fishMovement.setEnemyFoodUtility(enemyFoodMapping);
+        birdMovement.setEnemyFoodUtility(enemyFoodMapping);
     }
 
     void generateMap (){
@@ -131,10 +137,10 @@ public class Simulation {
     void initCreature (Species species){
         for (int i=0; i<mapOfCreatures.get(Character.valueOf(species.getCharacter())).intValue() ; i++){
             Creature creature = new Creature(species);
-            this.creatureList.add(creature);
             do {
                 generateXY(creature);
-            } while (!isFree(creature,this.creatureList) && !canBeHere(species, creature));
+            } while (!isFree(creature,creatureList) || !canBeHere(species, creature));
+            creatureList.add(creature);
             System.out.println(creature.getX() + " " + creature.getY() + " " + creature.getSpecies().getName());
         }
     }
@@ -149,26 +155,43 @@ public class Simulation {
         updateMap(creatureList);
     }
 
+    boolean moving (){
+        boolean somebodyMoves = false;
+        for (int i=0; i <creatureList.size(); i++){
+            Creature creature = creatureList.get(i);
+            if (creature.getSpeed() > 0){
+                if (creature.getSpecies() == fish) {
+                    fishMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else if (creature.getSpecies() == bird) {
+                    birdMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else {
+                    defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                }
+                creature.setSpeed(creature.getSpeed() - 1);
+            } //TODO rozszerzalność tego gówna
+        }
+        return somebodyMoves;
+    }
+
     void simulationCycle()
     {
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
                 creature.setHp(creature.getSpecies().getBaseHp());
+                map.map[1][creature.getX()][creature.getY()] = '\0';
             }
-            for(int i=0; i<creatureList.size(); i++){
-                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
-                map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
-                while(creatureList.get(i).getSpeed()!=0) {
-                    creatureList.get(i).setSpeed(creatureList.get(i).getSpeed() - 1);
-                    defaultMovement.performSingleStep(creatureList.get(i), creatureList, this.map.map[0][creatureList.get(i).getX()][creatureList.get(i).getY()] );
-                }
-                defaultFight.performAttack(creatureList.get(i), creatureList);
-                if (creatureList.get(i).getHp()==0){
-                    map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
-                    creatureList.remove(i);
-                }
-            }
+//                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
+                while (moving());
+//                defaultFight.performAttack(creatureList.get(i), creatureList);
+//                if (creatureList.get(i).getHp()==0){
+//                    map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
+//                    creatureList.remove(i);
+//                }
+
             updateMap(creatureList);
         }
     }
@@ -183,9 +206,9 @@ public class Simulation {
         int x;
         int y;
         Random rand = new Random();
-        int n = rand.nextInt(100);
+        int n = rand.nextInt(map.sizeOfMap);
         x = n;
-        n = rand.nextInt(100);
+        n = rand.nextInt(map.sizeOfMap);
         y = n;
 
         creature.setX(x);
@@ -203,7 +226,7 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(5, mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(1 , mapCrFromGUI, mapNameFromGUI);
         simulation.map = new Map(simulation.mapName);
         simulation.initSpecies();
         simulation.firstAddToMap();
@@ -212,9 +235,9 @@ public class Simulation {
         for (int i=0; i<simulation.creatureList.size();i++){
             System.out.println(simulation.creatureList.get(i).getX() + " " + simulation.creatureList.get(i).getY() + " " + simulation.creatureList.get(i).getSpecies().getName());
         }
-        simulation.generateMap();
+        //simulation.generateMap();
     }
-}
+} //TODO bool który mówi czy coś się wykonało
 
 
 
