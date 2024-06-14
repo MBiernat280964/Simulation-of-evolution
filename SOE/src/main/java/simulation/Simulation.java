@@ -155,32 +155,43 @@ public class Simulation {
         updateMap(creatureList);
     }
 
+    boolean moving (){
+        boolean somebodyMoves = false;
+        for (int i=0; i <creatureList.size(); i++){
+            Creature creature = creatureList.get(i);
+            if (creature.getSpeed() > 0){
+                if (creature.getSpecies() == fish) {
+                    fishMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else if (creature.getSpecies() == bird) {
+                    birdMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else {
+                    defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                }
+                creature.setSpeed(creature.getSpeed() - 1);
+            } //TODO rozszerzalność tego gówna
+        }
+        return somebodyMoves;
+    }
+
     void simulationCycle()
     {
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
                 creature.setHp(creature.getSpecies().getBaseHp());
+                map.map[1][creature.getX()][creature.getY()] = '\0';
             }
-            for(int i=0; i<creatureList.size(); i++){
 //                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
-                map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
-                while(creatureList.get(i).getSpeed()!=0) {
-                    creatureList.get(i).setSpeed(creatureList.get(i).getSpeed() - 1);
-                    if (creatureList.get(i).getSpecies() == fish) {
-                        fishMovement.performSingleStep(creatureList.get(i), creatureList, map.map[0]);
-                    } else if (creatureList.get(i).getSpecies() == bird) {
-                        birdMovement.performSingleStep(creatureList.get(i), creatureList, map.map[0]);
-                    } else {
-                        defaultMovement.performSingleStep(creatureList.get(i), creatureList, map.map[0]);
-                    }
-                }
+                while (moving());
 //                defaultFight.performAttack(creatureList.get(i), creatureList);
 //                if (creatureList.get(i).getHp()==0){
 //                    map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
 //                    creatureList.remove(i);
 //                }
-            }
+
             updateMap(creatureList);
         }
     }
@@ -224,9 +235,9 @@ public class Simulation {
         for (int i=0; i<simulation.creatureList.size();i++){
             System.out.println(simulation.creatureList.get(i).getX() + " " + simulation.creatureList.get(i).getY() + " " + simulation.creatureList.get(i).getSpecies().getName());
         }
-        simulation.generateMap();
+        //simulation.generateMap();
     }
-}
+} //TODO bool który mówi czy coś się wykonało
 
 
 

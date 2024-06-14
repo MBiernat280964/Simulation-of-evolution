@@ -9,12 +9,12 @@ public abstract class BaseMovementLogic implements MovementLogic{
     Random random = new Random();
 
 
-    private int calculateDistance(Creature creature, Creature other){
+    protected int calculateDistance(Creature creature, Creature other){
         int dist = Math.abs(creature.getX() - other.getX()) + Math.abs(creature.getY() - other.getY());
         return dist;
     }
 
-    private List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
+    protected List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
         int minDistanceToEnemy = Integer.MAX_VALUE;
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
@@ -32,17 +32,17 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-    private List<Creature> findNearestFriends (Creature creature, List<Creature> creatureList){
-        int maxDistanceToFriend = Integer.MAX_VALUE;
+    protected List<Creature> findNearestFriends (Creature creature, List<Creature> creatureList){
+        int minDistanceToFriend = Integer.MAX_VALUE;
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
             if (creature.getSpecies()==creatureList.get(i).getSpecies() && !(creature.getX()==creatureList.get(i).getX() && creature.getY()==creatureList.get(i).getY())) {
                 int dist =  calculateDistance(creature, creatureList.get(i));
-                if(dist < maxDistanceToFriend){
-                    maxDistanceToFriend = dist;
+                if(dist < minDistanceToFriend){
+                    minDistanceToFriend = dist;
                     results.clear();
                     results.add(creatureList.get(i));
-                } else if (dist == maxDistanceToFriend) {
+                } else if (dist == minDistanceToFriend) {
                     results.add(creatureList.get(i));
                 }
             }
@@ -50,17 +50,17 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-    private List<Creature> findNearestFood (Creature creature, List<Creature> creatureList){
-        int maxDistanceToFood = Integer.MAX_VALUE;
+    protected List<Creature> findNearestFood (Creature creature, List<Creature> creatureList){
+        int minDistanceToFood = Integer.MAX_VALUE;
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
             if (enemyFoodUtility.isFood(creature, creatureList.get(i))) {
                 int dist =  calculateDistance(creature, creatureList.get(i));
-                if(dist < maxDistanceToFood){
-                    maxDistanceToFood = dist;
+                if(dist < minDistanceToFood){
+                    minDistanceToFood = dist;
                     results.clear();
                     results.add(creatureList.get(i));
-                } else if (dist == maxDistanceToFood) {
+                } else if (dist == minDistanceToFood) {
                     results.add(creatureList.get(i));
                 }
             }
@@ -68,7 +68,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-    private int[] chooseMoveDirection (Creature creature, List<Creature> creatureList) {
+    protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList) {
         int enemyDist = Integer.MAX_VALUE;
         List<Creature> enemies = findNearestEnemies(creature, creatureList);
         if (!enemies.isEmpty()) {
@@ -82,52 +82,40 @@ public abstract class BaseMovementLogic implements MovementLogic{
         Creature other;
         int x;
         int y;
-        int newCreatureX = creature.getX();
-        int newCreatureY = creature.getY();
         if (enemyDist > friendDist && !friends.isEmpty()) {
-            other = friends.get(0);
+            other = friends.get(random.nextInt(friends.size()));
             x = other.getX() - creature.getX();
             y = other.getY() - creature.getY();
-            int i = random.nextInt(10);
 
-            if (i < 5) {
-                if (x < 0) {
-                    newCreatureX = creature.getX() - 1;
-                } else  if (x>0){
-                    newCreatureX = creature.getX() + 1;
-                }
-            } else {
-                if (y < 0) {
-                    newCreatureY = creature.getY() - 1;
-                } else if (y > 0) {
-                    newCreatureY = creature.getY() + 1;
-                }
+            if (x < 0) {
+                x = -1;
+            } else  if (x>0){
+                x = 1;
+            }
+            if (y < 0) {
+                y = -1;
+            } else if (y > 0) {
+                y = 1;
             }
 
-        } else if (!enemies.isEmpty()) {
+        } else {
             other = enemies.get(random.nextInt(enemies.size()));
             x = creature.getX() - other.getX();
             y = creature.getY() - other.getY();
-            int i = random.nextInt(8);
-            if (i < 5 && x != 0) {
-                if (x < 0) {
-                    newCreatureX = creature.getX() - 1;
-                } else {
-                    newCreatureX = creature.getX() + 1;
-                }
+            if (x < 0) {
+                x = - 1;
             } else {
-                if (y < 0) {
-                    newCreatureY = creature.getY() - 1;
-                } else if (y > 0) {
-                    newCreatureY = creature.getY() + 1;
-                }
+                x = 1;
+            }
+            if (y < 0) {
+                y = - 1;
+            } else if (y > 0) {
+                y = 1;
             }
         }
-
-        int[] vector = {newCreatureX,newCreatureY};
-        return vector;
+        return new int[]{x,y};
     }
-    private boolean isMovePossible (List <Creature> creatureList, int[] tab, char[][] surfaceLayer){
+     protected boolean isMovePossible(List<Creature> creatureList, int[] tab, char[][] surfaceLayer){
         for (int i=0; i<creatureList.size(); i++){
             if ((creatureList.get(i).getX() == tab[0] && creatureList.get(i).getY()== tab[1])){
                 return false;
@@ -141,10 +129,14 @@ public abstract class BaseMovementLogic implements MovementLogic{
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList, char [][] surfaceLayer) {
         int[] tab = chooseMoveDirection(creature, creatureList);
-        //TODO: poprawić! losowanie jednej z 2 opcji, poruszanie w którąś, jeśli się nie da to w inną
-        if (isMovePossible(creatureList, tab, surfaceLayer)) {
-            creature.setX(tab[0]);
-            creature.setY(tab[1]);
+        double i = random.nextDouble();
+        if (i<0.5 && isMovePossible(creatureList, new int[]{creature.getX()+tab[0], creature.getY()}, surfaceLayer)) {
+            creature.setX(creature.getX()+tab[0]);
+        } else if (isMovePossible(creatureList, new int[]{creature.getX(), creature.getY()+tab[1]}, surfaceLayer)){
+            creature.setY(creature.getY()+tab[1]);
+        } else if (isMovePossible(creatureList, new int[]{creature.getX()+tab[0], creature.getY()+tab[1]}, surfaceLayer)) {
+            creature.setY(creature.getX()+tab[0]);
+            creature.setY(creature.getY()+tab[1]);
         }
     }
 
