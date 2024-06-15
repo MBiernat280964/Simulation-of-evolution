@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class BaseMovementLogic implements MovementLogic{
-    private EnemyFoodUtility enemyFoodUtility;
+    protected EnemyFoodUtility enemyFoodUtility;
     Random random = new Random();
 
 

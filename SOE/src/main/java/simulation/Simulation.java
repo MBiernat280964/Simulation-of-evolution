@@ -25,6 +25,7 @@ public class Simulation {
     private DefaultFight defaultFight = new DefaultFight();
     private OtherBreed otherBreed = new OtherBreed();
     private BirdMovement birdMovement = new BirdMovement ();
+    private AggressiveMovement aggressiveMovement = new AggressiveMovement();
 
     Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
     Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
@@ -62,16 +63,24 @@ public class Simulation {
         enemyFoodMapping.addEnemy(fish , dinosaur);
 
         enemyFoodMapping.addFood(wolf , fish);
+        enemyFoodMapping.addFood(wolf, dinosaur);
         enemyFoodMapping.addFood(bird , fish);
         enemyFoodMapping.addFood(bird , cockroach);
         enemyFoodMapping.addFood(human , fish);
         enemyFoodMapping.addFood(human , bird);
+        enemyFoodMapping.addFood(human, dinosaur);
         enemyFoodMapping.addFood(dinosaur , fish);
+        enemyFoodMapping.addFood(dinosaur, human);
+        enemyFoodMapping.addFood(dinosaur, wolf);
         enemyFoodMapping.addFood(fish , cockroach);
+        enemyFoodMapping.addFood(cockroach, human);
 
         defaultMovement.setEnemyFoodUtility(enemyFoodMapping);
         fishMovement.setEnemyFoodUtility(enemyFoodMapping);
         birdMovement.setEnemyFoodUtility(enemyFoodMapping);
+        aggressiveMovement.setEnemyFoodUtility(enemyFoodMapping);
+
+        defaultFight.setEnemyFoodUtility(enemyFoodMapping);
     }
 
     void generateMap (){
@@ -166,6 +175,9 @@ public class Simulation {
                 } else if (creature.getSpecies() == bird) {
                     birdMovement.performSingleStep(creature, creatureList, map.map[0]);
                     somebodyMoves = true;
+                } else if(creature.getSpecies() == dinosaur) {
+                    aggressiveMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
                 } else {
                     defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
                     somebodyMoves = true;
@@ -174,6 +186,16 @@ public class Simulation {
             } //TODO rozszerzalność tego gówna
         }
         return somebodyMoves;
+    }
+
+    boolean fighting (){//walka zwraca boola z tym czy kogoś zaatakowali
+        List<Creature> yetToFight = new ArrayList<>(creatureList);
+        boolean somebodyAttacks = false;
+        for (int i=0; i<yetToFight.size(); i++){
+            Creature creature = yetToFight.get(i);
+            somebodyAttacks = defaultFight.performAttack(creature, creatureList) || somebodyAttacks;
+        }
+        return somebodyAttacks;
     }
 
     void simulationCycle()
@@ -186,12 +208,7 @@ public class Simulation {
             }
 //                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 while (moving());
-//                defaultFight.performAttack(creatureList.get(i), creatureList);
-//                if (creatureList.get(i).getHp()==0){
-//                    map.map[1][creatureList.get(i).getX()][creatureList.get(i).getY()] = '\0';
-//                    creatureList.remove(i);
-//                }
-
+                while (fighting());
             updateMap(creatureList);
         }
     }
@@ -235,9 +252,9 @@ public class Simulation {
         for (int i=0; i<simulation.creatureList.size();i++){
             System.out.println(simulation.creatureList.get(i).getX() + " " + simulation.creatureList.get(i).getY() + " " + simulation.creatureList.get(i).getSpecies().getName());
         }
-        //simulation.generateMap();
+        simulation.generateMap();
     }
-} //TODO bool który mówi czy coś się wykonało
+} //TODO ruszanie się do jedzenia
 
 
 

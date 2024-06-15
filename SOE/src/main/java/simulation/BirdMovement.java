@@ -9,7 +9,7 @@ public class BirdMovement extends BaseMovementLogic{
                 return false;
             }
         }
-        if (tab[0]<0 || tab[1]<0 || tab[0]>surfaceLayer.length || tab[1]>surfaceLayer[0].length){
+        if (tab[0]<0 || tab[1]<0 || tab[0]>=surfaceLayer.length || tab[1]>=surfaceLayer[0].length){
             return false;
         }
         return true;

@@ -12,9 +12,9 @@ public abstract class BaseFightLogic implements FightLogic{
     private List<Creature> findEnemies (Creature creature, List<Creature> creatureList){
         List<Creature> results = new ArrayList<>();
         for (Creature value : creatureList) {
-            if (enemyFoodUtility.isEnemy(creature, value)) {
+            if (enemyFoodUtility.isFood(creature, value)) {
                 double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
-                if (dist <= Math.sqrt(2)) {
+                if (dist < 2) {
                     results.add(value);
                 }
             }
@@ -30,15 +30,18 @@ public abstract class BaseFightLogic implements FightLogic{
         return other;
     }
 
-    void attack (Creature other){
+    void attack (Creature other, List<Creature> creatureList){
         int hp;
         hp = other.getHp();
         hp--;
         other.setHp(hp);
+        if (hp == 0){
+            creatureList.remove(other);
+        }
     }
 
     private boolean isAttackPossible (Creature creature, List <Creature> creatureList){
-        if (creature.getHp()==0 || findEnemies(creature, creatureList).isEmpty()){
+        if (creature.getHp()<=0 || findEnemies(creature, creatureList).isEmpty()){
             return false;
         }
         return true;
@@ -46,11 +49,14 @@ public abstract class BaseFightLogic implements FightLogic{
 
     @Override
     public boolean performAttack(Creature creature, List <Creature> creatureList) {
-        for (int i=0; i<creatureList.size(); i++){
-            if (isAttackPossible(creature, creatureList)){
-                attack(chooseEnemy(creature, creatureList));
-            }
+        if (isAttackPossible(creature, creatureList)){
+            attack(chooseEnemy(creature, creatureList), creatureList);
+            return true;
         }
         return false;
+    }
+
+    public void setEnemyFoodUtility(EnemyFoodUtility enemyFoodUtility) {
+        this.enemyFoodUtility = enemyFoodUtility;
     }
 }

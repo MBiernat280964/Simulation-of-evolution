@@ -11,7 +11,7 @@ public class OtherMovement extends BaseMovementLogic{
                 return false;
             }
         }
-        if (tab[0]<0 || tab[1]<0 || tab[0]>surfaceLayer.length || tab[1]>surfaceLayer[0].length || surfaceLayer[tab[0]][tab[1]] == 'L' ){
+        if (tab[0]<0 || tab[1]<0 || tab[0]>=surfaceLayer.length || tab[1]>=surfaceLayer[0].length || surfaceLayer[tab[0]][tab[1]] == 'L' ){
             return false;
         }
         return true;
