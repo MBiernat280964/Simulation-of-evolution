@@ -36,13 +36,14 @@ public class Map {
     void showMap() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
-                if (this.map[1][i][j] == 0) {
+                if (map[1][i][j] == 0) {
                     System.out.print(this.map [0][i][j] + " ");
-
-                }
-                else {
+                } else if (map[1][i][j] == 'W' || map[1][i][j] == 'L') {
+                    System.out.print("\u001B[36m" + this.map[1][i][j] + " \u001B[0m");
+                } else  if (map[1][i][j] == 'x') {
+                    System.out.print("\u001B[37m" + this.map [1][i][j] + " \u001B[0m");
+                } else
                     System.out.print("\u001B[31m" + this.map [1][i][j] + " \u001B[0m");
-                }
             }
             System.out.print("\n");
         }

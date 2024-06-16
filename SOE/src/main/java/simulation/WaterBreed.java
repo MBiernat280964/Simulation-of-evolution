@@ -2,7 +2,7 @@ package simulation;
 
 import java.util.List;
 
-public class OtherBreed extends BaseBreedingLogic{
+public class WaterBreed extends BaseBreedingLogic{
     @Override
     protected boolean isBreedingEnabled(Creature creature, List<Creature> creatureList, char [][] surfaceLayer, int[] tab) {
         for (int i=0; i<creatureList.size(); i++){

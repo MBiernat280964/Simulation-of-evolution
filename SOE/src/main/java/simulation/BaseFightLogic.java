@@ -36,7 +36,6 @@ public abstract class BaseFightLogic implements FightLogic{
         hp--;
         other.setHp(hp);
         if (hp == 0){
-            System.out.println( other.getSpecies().getName() + " die");
             creatureList.remove(other);
         }
     }

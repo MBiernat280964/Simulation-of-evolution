@@ -2,7 +2,7 @@ package simulation;
 
 import java.util.List;
 
-public class OtherMovement extends BaseMovementLogic{
+public class WaterMovement extends BaseMovementLogic{
 
     @Override
     protected boolean isMovePossible(List<Creature> creatureList, int[] tab, char[][] surfaceLayer){

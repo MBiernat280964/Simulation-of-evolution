@@ -1,6 +1,5 @@
 package simulation;
 
-import java.lang.reflect.Array;
 import java.util.*;
 //TODO x jak coś umiera innym kolorem, innym kolorem urodzone, w i l w innym kolorze
 
@@ -18,16 +17,15 @@ public class Simulation {
     private int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
-    Scanner scanner = new Scanner(System.in);
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
-    private OtherMovement fishMovement = new OtherMovement();
+    private WaterMovement fishMovement = new WaterMovement();
     private DefaultFight defaultFight = new DefaultFight();
     private DefaultBreed defaultBreed = new DefaultBreed();
-    private OtherBreed otherBreed = new OtherBreed();
+    private WaterBreed fishBreed = new WaterBreed();
     private BirdMovement birdMovement = new BirdMovement ();
     private AggressiveMovement aggressiveMovement = new AggressiveMovement();
 
@@ -95,7 +93,7 @@ public class Simulation {
         defaultFight.setEnemyFoodUtility(enemyFoodMapping);
 
         defaultBreed.setEnemyFoodUtility(enemyFoodMapping);
-        otherBreed.setEnemyFoodUtility(enemyFoodMapping);
+        fishBreed.setEnemyFoodUtility(enemyFoodMapping);
     }
 
     void generateMap (){
@@ -183,7 +181,11 @@ public class Simulation {
         boolean somebodyMoves = false;
         for (int i=0; i <creatureList.size(); i++){
             Creature creature = creatureList.get(i);
-            map.map[1][creature.getX()][creature.getY()] = '-';
+            if (map.map[0][creature.getX()][creature.getY()] == 'W'){
+                map.map[1][creature.getX()][creature.getY()] = 'W';
+            } else {
+                map.map[1][creature.getX()][creature.getY()] = 'L';
+            }
             if (creature.getSpeed() > 0){
                 if (creature.getSpecies() == fish) {
                     fishMovement.performSingleStep(creature, creatureList, map.map[0]);
@@ -212,8 +214,11 @@ public class Simulation {
                 Creature creature = creatureList.get(i);
                 double remainingPower = (double)creature.getSpeed()/(double)creature.getSpecies().getSpeed();
                 if(remainingPower >= (double)j/10 && creature.getSpeed() > 0){
-                    map.map[1][creature.getX()][creature.getY()] = '-';
-                    if (creature.getSpecies() == fish) {
+                    if (map.map[0][creature.getX()][creature.getY()] == 'W'){
+                        map.map[1][creature.getX()][creature.getY()] = 'W';
+                    } else {
+                        map.map[1][creature.getX()][creature.getY()] = 'L';
+                    }                    if (creature.getSpecies() == fish) {
                         fishMovement.performSingleStep(creature, creatureList, map.map[0]);
                     } else if (creature.getSpecies() == bird) {
                         birdMovement.performSingleStep(creature, creatureList, map.map[0]);
@@ -236,6 +241,7 @@ public class Simulation {
         boolean somebodyAttacks = false;
         for (int i=0; i<yetToFight.size(); i++){
             Creature creature = yetToFight.get(i);
+            map.map[1][creature.getX()][creature.getY()] = 'x';
             somebodyAttacks = defaultFight.performAttack(creature, creatureList) || somebodyAttacks;
         }
         return somebodyAttacks;
@@ -246,7 +252,7 @@ public class Simulation {
         for (int i=0; i<yetToBreed.size(); i++){
             Creature creature = yetToBreed.get(i);
             if (creature.getSpecies() == fish){
-                otherBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
+                fishBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
             } else {
                 defaultBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
             }
