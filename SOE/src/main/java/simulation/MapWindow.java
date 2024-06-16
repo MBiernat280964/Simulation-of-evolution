@@ -13,6 +13,10 @@ public class MapWindow {
         this.frame = frame;
         prepareGUI();
     }
+    public static void main(String[] args) {
+        Map mapka = new Map("island");
+        MapWindow window = new MapWindow(mapka.map,new JFrame("Mapeczka"));
+    }
 
     private void prepareGUI() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +27,7 @@ public class MapWindow {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
                 this.jPanelArray[i][j] = new JPanel();
                 if (this.map[1][i][j] != '\0') {
-                    this.jPanelArray[i][j].setBackground(Color.white);
+                    this.jPanelArray[i][j].setBackground(Color.pink);
                 }else if (this.map[0][i][j] == 'L') {
                     this.jPanelArray[i][j].setBackground(Color.green);
                 }
