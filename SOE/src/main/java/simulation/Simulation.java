@@ -14,7 +14,7 @@ public class Simulation {
     private static final long SLEEP_TIME_MILLIS = 500;
 
     Map map;
-    private int years = 100;     // default: from user input
+    private static int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
 
