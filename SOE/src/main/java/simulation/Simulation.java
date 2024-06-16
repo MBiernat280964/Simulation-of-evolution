@@ -2,7 +2,7 @@ package simulation;
 
 import java.lang.reflect.Array;
 import java.util.*;
-
+//TODO x jak coś umiera innym kolorem, innym kolorem urodzone, w i l w innym kolorze
 
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
@@ -10,6 +10,11 @@ import java.util.*;
  */
 public class Simulation {
 
+    private static final double POPULATION_FACTOR_BASE = 0.01;
+
+    private static final long SLEEP_TIME_MILLIS = 500;
+
+    Map map;
     private int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
@@ -26,19 +31,27 @@ public class Simulation {
     private BirdMovement birdMovement = new BirdMovement ();
     private AggressiveMovement aggressiveMovement = new AggressiveMovement();
 
-    Species wolf = new Species(2,1,"Wolf", 4, 200, 'w', 8);
-    Species bird = new Species(6, 1, "Bird", 8, 200, 'b', 6);
-    Species cockroach = new Species(2, 1, "Cockroach", 2, 150, 'c', 4);
-    Species human = new Species(3, 3, "Human", 4, 200, 'h', 8);
-    Species dinosaur = new Species(2, 6, "Dinosaur", 2, 100, 'd', 10);
-    Species fish = new Species(5, 1, "Fish", 8, 150, 'f', 4);
+    Species wolf;
+    Species bird;
+    Species cockroach;
+    Species human;
+    Species dinosaur;
+    Species fish;
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
         this.mapOfCreatures = mapOfCreatures;
         this.mapName = mapName;
     }
-    Map map;
     private void initSpecies(){
+        double populationFactor = map.sizeOfMap * map.sizeOfMap * POPULATION_FACTOR_BASE;
+        wolf = new Species(2,2,"Wolf", 4, (int)(populationFactor * 2), 'w', 8);
+        bird = new Species(5, 1, "Bird", 8, (int)(populationFactor * 2), 'b', 10);
+        cockroach = new Species(2, 1, "Cockroach", 2, (int)(populationFactor * 1.5), 'c', 4);
+        human = new Species(3, 2, "Human", 4, (int)(populationFactor * 2), 'h', 8);
+        dinosaur = new Species(2, 4, "Dinosaur", 2, (int)(populationFactor), 'd', 10);
+        fish = new Species(6, 1, "Fish", 8, (int)(populationFactor * 1.5), 'f', 4);
+
+
         speciesList = new ArrayList<>();
         speciesList.add(wolf);
         speciesList.add(bird);
@@ -50,7 +63,7 @@ public class Simulation {
         enemyFoodMapping.initSpecies(speciesList);
 
         enemyFoodMapping.addEnemy(wolf , dinosaur);
-        enemyFoodMapping.addEnemy(bird , human);
+//        enemyFoodMapping.addEnemy(bird , human);
         enemyFoodMapping.addEnemy(cockroach , fish);
         enemyFoodMapping.addEnemy(human , dinosaur);
         enemyFoodMapping.addEnemy(human , cockroach);
@@ -170,9 +183,6 @@ public class Simulation {
         boolean somebodyMoves = false;
         for (int i=0; i <creatureList.size(); i++){
             Creature creature = creatureList.get(i);
-            if (creature.getVelocity() != null && map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == 'v'){
-                map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] = '\0';
-            }
             map.map[1][creature.getX()][creature.getY()] = '-';
             if (creature.getSpeed() > 0){
                 if (creature.getSpecies() == fish) {
@@ -190,13 +200,36 @@ public class Simulation {
                 }
                 creature.setSpeed(creature.getSpeed() - 1);
             }
-            if (creature.getVelocity() != null && (map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == '\0' || map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == '-')){
-                map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] = 'v';
-            }
             updateMap(creatureList);
         }
         return somebodyMoves;
     }
+
+    void moving2 (){
+        for(int j=10; j>0; j--){
+
+            for (int i=0; i <creatureList.size(); i++){
+                Creature creature = creatureList.get(i);
+                double remainingPower = (double)creature.getSpeed()/(double)creature.getSpecies().getSpeed();
+                if(remainingPower >= (double)j/10 && creature.getSpeed() > 0){
+                    map.map[1][creature.getX()][creature.getY()] = '-';
+                    if (creature.getSpecies() == fish) {
+                        fishMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    } else if (creature.getSpecies() == bird) {
+                        birdMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    } else if(creature.getSpecies() == dinosaur) {
+                        aggressiveMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    } else {
+                        defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    }
+                    creature.setSpeed(creature.getSpeed() - 1);
+                }
+                updateMap(creatureList);
+            }
+            printMap(-1);
+        }
+    }
+
 
     boolean fighting (){
         List<Creature> yetToFight = new ArrayList<>(creatureList);
@@ -229,13 +262,14 @@ public class Simulation {
                 creature.setBreedingEnabled(true);
                 map.map[1][creature.getX()][creature.getY()] = '\0';
             }
-                while (moving());
-                while (fighting());
-                breeding();
+            breeding();
             updateMap(creatureList);
-            scanner.nextLine();
-            System.out.println("year: " + (year + 1));
-            generateMap();
+            printMap(-1);
+//            while (moving());
+            moving2();
+            while (fighting());
+            updateMap(creatureList);
+            printMap(year);
 
             for (int i=0; i<map.sizeOfMap; i++){
                 for (int j=0; j<map.sizeOfMap; j++){
@@ -243,6 +277,21 @@ public class Simulation {
                 }
             }
         }
+    }
+
+    private void printMap(int year){
+        updateMap(creatureList);
+//        scanner.nextLine();
+        try{
+            Thread.sleep(SLEEP_TIME_MILLIS);
+        } catch(InterruptedException e){
+            throw new RuntimeException(e);
+        }
+        if(year != -1){
+            System.out.println("year: " + (year + 1));
+        }
+        generateMap();
+        System.out.println();
     }
 
 
@@ -275,14 +324,15 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(10 , mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(100 , mapCrFromGUI, mapNameFromGUI);
         simulation.map = new Map(simulation.mapName);
+
         simulation.initSpecies();
         simulation.firstAddToMap();
         simulation.generateMap();
         simulation.simulationCycle();
     }
-} //TODO ruszanie się do jedzenia
+}
 
 
 

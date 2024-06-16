@@ -9,7 +9,7 @@ import java.lang.Math;
  */
 
 public class Map {
-    final public int sizeOfMap = 50;
+    final public int sizeOfMap = 24;
 
     char [][][] map = new char [2][sizeOfMap][sizeOfMap];
 

@@ -187,12 +187,13 @@ public class GUI extends JFrame {
     JLabel label6 = new JLabel("Dinos");
     JLabel label7 = new JLabel("Bird");
     JLabel label8 = new JLabel("Fish");
-    JSpinner l1 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l2 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l3 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l4 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l5 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l6 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
+    JSpinner l1 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+    JSpinner l2 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+    JSpinner l3 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+    JSpinner l4 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+    JSpinner l5 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+    JSpinner l6 = new JSpinner(new SpinnerNumberModel(2, 1, 300, 1));
+
 
 
     public static void main(String[] args) {

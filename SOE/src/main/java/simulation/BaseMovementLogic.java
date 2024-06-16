@@ -15,7 +15,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
     }
 
     protected List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
-        int minDistanceToEnemy = Integer.MAX_VALUE;
+        int minDistanceToEnemy = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
             if (enemyFoodUtility!= null && enemyFoodUtility.isEnemy(creature, creatureList.get(i))) {
@@ -33,7 +33,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
     }
 
     protected List<Creature> findNearestFriends (Creature creature, List<Creature> creatureList){
-        int minDistanceToFriend = Integer.MAX_VALUE;
+        int minDistanceToFriend = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
             if (creature.getSpecies()==creatureList.get(i).getSpecies() && !(creature.getX()==creatureList.get(i).getX() && creature.getY()==creatureList.get(i).getY())) {
@@ -51,7 +51,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
     }
 
     protected List<Creature> findNearestFood (Creature creature, List<Creature> creatureList){
-        int minDistanceToFood = Integer.MAX_VALUE;
+        int minDistanceToFood = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
         for(int i = 0; i < creatureList.size(); i++){
             if (enemyFoodUtility.isFood(creature, creatureList.get(i))) {
@@ -69,37 +69,40 @@ public abstract class BaseMovementLogic implements MovementLogic{
     }
 
     protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList, char[][] surfaceLayer) {
-        int dist;
-        int enemyDist = Integer.MAX_VALUE;
         List<Creature> enemies = findNearestEnemies(creature, creatureList);
-        if (!enemies.isEmpty()) {
-            enemyDist = calculateDistance(creature, enemies.get(0));
+
+        int foodDist = creature.getSpecies().getSightRange();
+        List<Creature> food = findNearestFood(creature, creatureList);
+        if (!food.isEmpty()) {
+            foodDist = calculateDistance(creature, food.get(0));
         }
-        int friendDist = Integer.MAX_VALUE;
+
+        int friendDist = creature.getSpecies().getSightRange();
         List<Creature> friends = findNearestFriends(creature, creatureList);
         if (!friends.isEmpty()) {
             friendDist = calculateDistance(creature, friends.get(0));
         }
         Creature other;
         int goForward;
-        if (enemyDist > friendDist && !friends.isEmpty()) {
-            other = friends.get(random.nextInt(friends.size()));
-            goForward = 1;
-            dist = friendDist;
-        } else {
+        if(!enemies.isEmpty()) {
             other = enemies.get(random.nextInt(enemies.size()));
             goForward = -1;
-            dist = enemyDist;
-        }
-        int x = Integer.signum(other.getX() - creature.getX()) * goForward;
-        int y = Integer.signum(other.getY() - creature.getY()) * goForward;
-        if (dist>creature.getSpecies().getSightRange()){
+        } else if (!food.isEmpty()) {
+            other = food.get(random.nextInt(food.size()));
+            goForward = 1;
+        }  else if(!friends.isEmpty()) {
+            other = friends.get(random.nextInt(friends.size()));
+            goForward = 1;
+        } else {
             if (random.nextDouble()<0.05 || creature.getVelocity()==null || (creature.getVelocity()[0] == creature.getX() && creature.getVelocity()[1] == creature.getY())){
                 chooseVelocity(creature, surfaceLayer);
             }
-            x = Integer.signum(creature.getVelocity()[0] - creature.getX());
-            y = Integer.signum(creature.getVelocity()[1] - creature.getY());
+            int x = Integer.signum(creature.getVelocity()[0] - creature.getX());
+            int y = Integer.signum(creature.getVelocity()[1] - creature.getY());
+            return new int[]{x,y};
         }
+        int x = Integer.signum(other.getX() - creature.getX()) * goForward;
+        int y = Integer.signum(other.getY() - creature.getY()) * goForward;
         return new int[]{x,y};
     }
 
@@ -127,7 +130,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
     public void performSingleStep(Creature creature, List<Creature> creatureList, char [][] surfaceLayer) {
         int[] moveDirection = chooseMoveDirection(creature, creatureList, surfaceLayer);
         double i = random.nextDouble();
-        if ((i<0.5 && moveDirection[0] != 0) || moveDirection[1] == 0 && isMovePossible(creatureList, new int[]{creature.getX()+moveDirection[0], creature.getY()}, surfaceLayer)) {
+        if (((i<0.5 && moveDirection[0] != 0) || moveDirection[1] == 0) && isMovePossible(creatureList, new int[]{creature.getX()+moveDirection[0], creature.getY()}, surfaceLayer)) {
             creature.setX(creature.getX()+moveDirection[0]);
         } else if (isMovePossible(creatureList, new int[]{creature.getX(), creature.getY()+moveDirection[1]}, surfaceLayer)){
             creature.setY(creature.getY()+moveDirection[1]);
