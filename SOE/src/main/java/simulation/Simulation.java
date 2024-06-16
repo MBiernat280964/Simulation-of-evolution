@@ -26,12 +26,12 @@ public class Simulation {
     private BirdMovement birdMovement = new BirdMovement ();
     private AggressiveMovement aggressiveMovement = new AggressiveMovement();
 
-    Species wolf = new Species(2,1,"Wolf", 4, 200, 'w');
-    Species bird = new Species(10, 1, "Bird", 8, 200, 'b');
-    Species cockroach = new Species(1, 1, "Cockroach", 2, 150, 'c');
-    Species human = new Species(3, 3, "Human", 4, 200, 'h');
-    Species dinosaur = new Species(1, 6, "Dinosaur", 2, 100, 'd');
-    Species fish = new Species(5, 1, "Fish", 8, 150, 'f');
+    Species wolf = new Species(2,1,"Wolf", 4, 200, 'w', 8);
+    Species bird = new Species(6, 1, "Bird", 8, 200, 'b', 6);
+    Species cockroach = new Species(2, 1, "Cockroach", 2, 150, 'c', 4);
+    Species human = new Species(3, 3, "Human", 4, 200, 'h', 8);
+    Species dinosaur = new Species(2, 6, "Dinosaur", 2, 100, 'd', 10);
+    Species fish = new Species(5, 1, "Fish", 8, 150, 'f', 4);
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
         this.mapOfCreatures = mapOfCreatures;
@@ -170,6 +170,10 @@ public class Simulation {
         boolean somebodyMoves = false;
         for (int i=0; i <creatureList.size(); i++){
             Creature creature = creatureList.get(i);
+            if (creature.getVelocity() != null && map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == 'v'){
+                map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] = '\0';
+            }
+            map.map[1][creature.getX()][creature.getY()] = '-';
             if (creature.getSpeed() > 0){
                 if (creature.getSpecies() == fish) {
                     fishMovement.performSingleStep(creature, creatureList, map.map[0]);
@@ -186,6 +190,10 @@ public class Simulation {
                 }
                 creature.setSpeed(creature.getSpeed() - 1);
             }
+            if (creature.getVelocity() != null && (map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == '\0' || map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] == '-')){
+                map.map[1][creature.getVelocity()[0]][creature.getVelocity()[1]] = 'v';
+            }
+            updateMap(creatureList);
         }
         return somebodyMoves;
     }
@@ -228,6 +236,12 @@ public class Simulation {
             scanner.nextLine();
             System.out.println("year: " + (year + 1));
             generateMap();
+
+            for (int i=0; i<map.sizeOfMap; i++){
+                for (int j=0; j<map.sizeOfMap; j++){
+                    map.map[1][i][j]='\0';
+                }
+            }
         }
     }
 

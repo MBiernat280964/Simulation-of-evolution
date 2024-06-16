@@ -68,7 +68,8 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
-    protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList) {
+    protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList, char[][] surfaceLayer) {
+        int dist;
         int enemyDist = Integer.MAX_VALUE;
         List<Creature> enemies = findNearestEnemies(creature, creatureList);
         if (!enemies.isEmpty()) {
@@ -80,63 +81,71 @@ public abstract class BaseMovementLogic implements MovementLogic{
             friendDist = calculateDistance(creature, friends.get(0));
         }
         Creature other;
-        int x;
-        int y;
+        int goForward;
         if (enemyDist > friendDist && !friends.isEmpty()) {
             other = friends.get(random.nextInt(friends.size()));
-            x = other.getX() - creature.getX();
-            y = other.getY() - creature.getY();
-
-            if (x < 0) {
-                x = -1;
-            } else  if (x>0){
-                x = 1;
-            }
-            if (y < 0) {
-                y = -1;
-            } else if (y > 0) {
-                y = 1;
-            }
-
+            goForward = 1;
+            dist = friendDist;
         } else {
             other = enemies.get(random.nextInt(enemies.size()));
-            x = creature.getX() - other.getX();
-            y = creature.getY() - other.getY();
-            if (x < 0) {
-                x = - 1;
-            } else {
-                x = 1;
+            goForward = -1;
+            dist = enemyDist;
+        }
+        int x = Integer.signum(other.getX() - creature.getX()) * goForward;
+        int y = Integer.signum(other.getY() - creature.getY()) * goForward;
+        if (dist>creature.getSpecies().getSightRange()){
+            if (random.nextDouble()<0.05 || creature.getVelocity()==null || (creature.getVelocity()[0] == creature.getX() && creature.getVelocity()[1] == creature.getY())){
+                chooseVelocity(creature, surfaceLayer);
             }
-            if (y < 0) {
-                y = - 1;
-            } else if (y > 0) {
-                y = 1;
-            }
+            x = Integer.signum(creature.getVelocity()[0] - creature.getX());
+            y = Integer.signum(creature.getVelocity()[1] - creature.getY());
         }
         return new int[]{x,y};
     }
-     protected boolean isMovePossible(List<Creature> creatureList, int[] tab, char[][] surfaceLayer){
+
+
+    protected void chooseVelocity(Creature creature, char[][] surfaceLayer){
+        int[] velocity = new int[2];
+        do {
+            velocity[0] = random.nextInt(surfaceLayer.length);
+            velocity[1] = random.nextInt(surfaceLayer.length);
+        } while (creature.getX()==velocity[0] && creature.getY()==velocity[1]);
+        creature.setVelocity(velocity);
+    }
+     protected boolean isMovePossible(List<Creature> creatureList, int[] newSpot, char[][] surfaceLayer){
         for (int i=0; i<creatureList.size(); i++){
-            if ((creatureList.get(i).getX() == tab[0] && creatureList.get(i).getY()== tab[1])){
+            if ((creatureList.get(i).getX() == newSpot[0] && creatureList.get(i).getY()== newSpot[1])){
                 return false;
             }
         }
-        if (tab[0]<0 || tab[1]<0 || tab[0]>=surfaceLayer.length || tab[1]>=surfaceLayer[0].length || surfaceLayer[tab[0]][tab[1]] == 'W' ){
+        if (newSpot[0]<0 || newSpot[1]<0 || newSpot[0]>=surfaceLayer.length || newSpot[1]>=surfaceLayer[0].length || surfaceLayer[newSpot[0]][newSpot[1]] == 'W' ){
             return false;
         }
         return true;
     }
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList, char [][] surfaceLayer) {
-        int[] tab = chooseMoveDirection(creature, creatureList);
+        int[] moveDirection = chooseMoveDirection(creature, creatureList, surfaceLayer);
         double i = random.nextDouble();
-        if (i<0.5 && isMovePossible(creatureList, new int[]{creature.getX()+tab[0], creature.getY()}, surfaceLayer)) {
-            creature.setX(creature.getX()+tab[0]);
-        } else if (isMovePossible(creatureList, new int[]{creature.getX(), creature.getY()+tab[1]}, surfaceLayer)){
-            creature.setY(creature.getY()+tab[1]);
-        } else if (isMovePossible(creatureList, new int[]{creature.getX()+tab[0], creature.getY()+tab[1]}, surfaceLayer)) {
-            creature.setY(creature.getX()+tab[0]);
-            creature.setY(creature.getY()+tab[1]);
+        if ((i<0.5 && moveDirection[0] != 0) || moveDirection[1] == 0 && isMovePossible(creatureList, new int[]{creature.getX()+moveDirection[0], creature.getY()}, surfaceLayer)) {
+            creature.setX(creature.getX()+moveDirection[0]);
+        } else if (isMovePossible(creatureList, new int[]{creature.getX(), creature.getY()+moveDirection[1]}, surfaceLayer)){
+            creature.setY(creature.getY()+moveDirection[1]);
+        } else if (isMovePossible(creatureList, new int[]{creature.getX()+moveDirection[0], creature.getY()+moveDirection[1]}, surfaceLayer)) {
+            creature.setX(creature.getX()+moveDirection[0]);
+            creature.setY(creature.getY()+moveDirection[1]);
+        } else if (moveDirection[0] == 0){
+            if (isMovePossible(creatureList, new int[]{(creature.getX()+1), creature.getY()}, surfaceLayer)){
+                creature.setX(creature.getX()+1);
+            } else if (isMovePossible(creatureList, new int[] {(creature.getX()-1), creature.getY()}, surfaceLayer)){
+                creature.setX(creature.getX()-1);
+            }
+        } else if (moveDirection[1] == 0){
+            if (isMovePossible(creatureList, new int[]{creature.getX(), (creature.getY()+1)}, surfaceLayer)){
+                creature.setY(creature.getY()+1);
+            } else if (isMovePossible(creatureList, new int[] {creature.getX(), (creature.getY()-1)}, surfaceLayer)){
+                creature.setY(creature.getY()-1);
+            }
         }
     }
 

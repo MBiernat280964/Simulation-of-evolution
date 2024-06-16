@@ -9,6 +9,7 @@ public class Creature {
     private int hp;
     private boolean breedingEnabled;
     private int speed;
+    private int[] velocity;
 
     public Creature(Species species) {
         this.species = species;
@@ -56,6 +57,14 @@ public class Creature {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public int[] getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int[] velocity) {
+        this.velocity = velocity;
     }
 }
 

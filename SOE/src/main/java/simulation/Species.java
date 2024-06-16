@@ -7,14 +7,16 @@ public class Species {
     private int breedingChance;
     private int maxPopulation;
     private char character;
+    private int sightRange;
 
-    public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation, char character) {
+    public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation, char character, int sightRange) {
         this.speed = speed;
         this.baseHp = baseHp;
         this.name = name;
         this.breedingChance = breedingChance;
         this.maxPopulation = maxPopulation;
         this.character = character;
+        this.sightRange = sightRange;
     }
 
     public int getSpeed() {
@@ -63,5 +65,13 @@ public class Species {
 
     public void setCharacter(char character) {
         this.character = character;
+    }
+
+    public int getSightRange() {
+        return sightRange;
+    }
+
+    public void setSightRange(int sightRange) {
+        this.sightRange = sightRange;
     }
 }
