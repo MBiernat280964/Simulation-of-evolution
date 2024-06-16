@@ -1,15 +1,11 @@
 package simulation;
 
-<<<<<<< HEAD
-import java.util.*;
-=======
 import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Timer;
 //TODO x jak coś umiera innym kolorem, innym kolorem urodzone, w i l w innym kolorze
 
->>>>>>> bf4f05666654e97b718868371cf41a34963aaa0c
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
  * It is responsible for creation and deletion of Creatures instances and updating map from Map instance
@@ -24,15 +20,16 @@ public class Simulation {
     private static int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
+    Scanner scanner = new Scanner(System.in);
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
     private EnemyFoodUtility enemyFoodMapping = new EnemyFoodUtility();
     private DefaultMovement defaultMovement = new DefaultMovement();
-    private WaterMovement fishMovement = new WaterMovement();
+    private OtherMovement fishMovement = new OtherMovement();
     private DefaultFight defaultFight = new DefaultFight();
     private DefaultBreed defaultBreed = new DefaultBreed();
-    private WaterBreed fishBreed = new WaterBreed();
+    private OtherBreed otherBreed = new OtherBreed();
     private BirdMovement birdMovement = new BirdMovement ();
     private AggressiveMovement aggressiveMovement = new AggressiveMovement();
 
@@ -100,7 +97,7 @@ public class Simulation {
         defaultFight.setEnemyFoodUtility(enemyFoodMapping);
 
         defaultBreed.setEnemyFoodUtility(enemyFoodMapping);
-        fishBreed.setEnemyFoodUtility(enemyFoodMapping);
+        otherBreed.setEnemyFoodUtility(enemyFoodMapping);
     }
 
     void generateMap (){
@@ -183,17 +180,42 @@ public class Simulation {
         initCreature(dinosaur);
         updateMap(creatureList);
     }
-    void moving(){
+
+    boolean moving (){
+        boolean somebodyMoves = false;
+        for (int i=0; i <creatureList.size(); i++){
+            Creature creature = creatureList.get(i);
+            map.map[1][creature.getX()][creature.getY()] = '-';
+            if (creature.getSpeed() > 0){
+                if (creature.getSpecies() == fish) {
+                    fishMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else if (creature.getSpecies() == bird) {
+                    birdMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else if(creature.getSpecies() == dinosaur) {
+                    aggressiveMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                } else {
+                    defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
+                    somebodyMoves = true;
+                }
+                creature.setSpeed(creature.getSpeed() - 1);
+            }
+            updateMap(creatureList);
+        }
+        return somebodyMoves;
+    }
+
+    void moving2 (){
         for(int j=10; j>0; j--){
+
             for (int i=0; i <creatureList.size(); i++){
                 Creature creature = creatureList.get(i);
                 double remainingPower = (double)creature.getSpeed()/(double)creature.getSpecies().getSpeed();
                 if(remainingPower >= (double)j/10 && creature.getSpeed() > 0){
-                    if (map.map[0][creature.getX()][creature.getY()] == 'W'){
-                        map.map[1][creature.getX()][creature.getY()] = 'W';
-                    } else {
-                        map.map[1][creature.getX()][creature.getY()] = 'L';
-                    }                    if (creature.getSpecies() == fish) {
+                    map.map[1][creature.getX()][creature.getY()] = '-';
+                    if (creature.getSpecies() == fish) {
                         fishMovement.performSingleStep(creature, creatureList, map.map[0]);
                     } else if (creature.getSpecies() == bird) {
                         birdMovement.performSingleStep(creature, creatureList, map.map[0]);
@@ -216,7 +238,6 @@ public class Simulation {
         boolean somebodyAttacks = false;
         for (int i=0; i<yetToFight.size(); i++){
             Creature creature = yetToFight.get(i);
-            map.map[1][creature.getX()][creature.getY()] = 'x';
             somebodyAttacks = defaultFight.performAttack(creature, creatureList) || somebodyAttacks;
         }
         return somebodyAttacks;
@@ -227,7 +248,7 @@ public class Simulation {
         for (int i=0; i<yetToBreed.size(); i++){
             Creature creature = yetToBreed.get(i);
             if (creature.getSpecies() == fish){
-                fishBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
+                otherBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
             } else {
                 defaultBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
             }
@@ -248,7 +269,7 @@ public class Simulation {
             updateMap(creatureList);
             printMap(-1);
 //            while (moving());
-            moving();
+            moving2();
             while (fighting());
             updateMap(creatureList);
             printMap(year);
@@ -328,12 +349,6 @@ public class Simulation {
         simulation.firstAddToMap();
         simulation.generateMap();
         simulation.simulationCycle();
-
-        for (int i=0; i<simulation.speciesList.size(); i++){
-            Species species = simulation.speciesList.get(i);
-            System.out.println("Count of " + species.getName() + ": " + simulation.getCreatureCount(species));
-        }
-        System.out.println("The winner is: " + simulation.winSpecies().getName());
     }
 }
 

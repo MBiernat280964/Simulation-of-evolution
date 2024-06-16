@@ -11,7 +11,7 @@ import java.lang.Math;
 public class Map {
     static final public int sizeOfMap = 24;
 
-    char [][][] map = new char [2][sizeOfMap][sizeOfMap];
+    static char [][][] map = new char [2][sizeOfMap][sizeOfMap];
 
     /**
      * Constructor for Map class
@@ -36,14 +36,13 @@ public class Map {
     void showMap() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
-                if (map[1][i][j] == 0) {
+                if (this.map[1][i][j] == 0) {
                     System.out.print(this.map [0][i][j] + " ");
-                } else if (map[1][i][j] == 'W' || map[1][i][j] == 'L') {
-                    System.out.print("\u001B[36m" + this.map[1][i][j] + " \u001B[0m");
-                } else  if (map[1][i][j] == 'x') {
-                    System.out.print("\u001B[37m" + this.map [1][i][j] + " \u001B[0m");
-                } else
+
+                }
+                else {
                     System.out.print("\u001B[31m" + this.map [1][i][j] + " \u001B[0m");
+                }
             }
             System.out.print("\n");
         }
