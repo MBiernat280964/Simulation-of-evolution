@@ -7,7 +7,7 @@ public class Creature {
     private int x;
     private int y;
     private int hp;
-    private boolean isBreedingEnabled;
+    private boolean breedingEnabled;
     private int speed;
 
     public Creature(Species species) {
@@ -42,12 +42,12 @@ public class Creature {
         this.hp = hp;
     }
 
-    public boolean isBreedingEnabled() {
-        return isBreedingEnabled;
+    public boolean getBreedingEnabled() {
+        return breedingEnabled;
     }
 
-    public void setBreedingEnabled(boolean breedingEnabled) {
-        isBreedingEnabled = breedingEnabled;
+    public void setBreedingEnabled(boolean isBreedingEnabled) {
+        breedingEnabled = isBreedingEnabled;
     }
 
     public int getSpeed() {

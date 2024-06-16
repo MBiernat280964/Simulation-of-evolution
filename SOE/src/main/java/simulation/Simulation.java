@@ -1,10 +1,7 @@
 package simulation;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -16,6 +13,7 @@ public class Simulation {
     private int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
+    Scanner scanner = new Scanner(System.in);
 
     private List<Species> speciesList;
     private List<Creature> creatureList = new ArrayList<>();
@@ -23,6 +21,7 @@ public class Simulation {
     private DefaultMovement defaultMovement = new DefaultMovement();
     private OtherMovement fishMovement = new OtherMovement();
     private DefaultFight defaultFight = new DefaultFight();
+    private DefaultBreed defaultBreed = new DefaultBreed();
     private OtherBreed otherBreed = new OtherBreed();
     private BirdMovement birdMovement = new BirdMovement ();
     private AggressiveMovement aggressiveMovement = new AggressiveMovement();
@@ -81,6 +80,9 @@ public class Simulation {
         aggressiveMovement.setEnemyFoodUtility(enemyFoodMapping);
 
         defaultFight.setEnemyFoodUtility(enemyFoodMapping);
+
+        defaultBreed.setEnemyFoodUtility(enemyFoodMapping);
+        otherBreed.setEnemyFoodUtility(enemyFoodMapping);
     }
 
     void generateMap (){
@@ -183,12 +185,12 @@ public class Simulation {
                     somebodyMoves = true;
                 }
                 creature.setSpeed(creature.getSpeed() - 1);
-            } //TODO rozszerzalność tego gówna
+            }
         }
         return somebodyMoves;
     }
 
-    boolean fighting (){//walka zwraca boola z tym czy kogoś zaatakowali
+    boolean fighting (){
         List<Creature> yetToFight = new ArrayList<>(creatureList);
         boolean somebodyAttacks = false;
         for (int i=0; i<yetToFight.size(); i++){
@@ -198,18 +200,34 @@ public class Simulation {
         return somebodyAttacks;
     }
 
+    void breeding (){
+        List<Creature> yetToBreed = new ArrayList<>(creatureList);
+        for (int i=0; i<yetToBreed.size(); i++){
+            Creature creature = yetToBreed.get(i);
+            if (creature.getSpecies() == fish){
+                otherBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
+            } else {
+                defaultBreed.performBreeding(creature, creatureList, getCreatureCount(creature.getSpecies()), map.map[0]);
+            }
+        }
+    }
+
     void simulationCycle()
     {
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
                 creature.setHp(creature.getSpecies().getBaseHp());
+                creature.setBreedingEnabled(true);
                 map.map[1][creature.getX()][creature.getY()] = '\0';
             }
-//                otherBreed.performBreeding(creatureList.get(i), creatureList, getCreatureCount(creatureList.get(i).getSpecies()));
                 while (moving());
                 while (fighting());
+                breeding();
             updateMap(creatureList);
+            scanner.nextLine();
+            System.out.println("year: " + (year + 1));
+            generateMap();
         }
     }
 
@@ -243,16 +261,12 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(1 , mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(10 , mapCrFromGUI, mapNameFromGUI);
         simulation.map = new Map(simulation.mapName);
         simulation.initSpecies();
         simulation.firstAddToMap();
         simulation.generateMap();
         simulation.simulationCycle();
-        for (int i=0; i<simulation.creatureList.size();i++){
-            System.out.println(simulation.creatureList.get(i).getX() + " " + simulation.creatureList.get(i).getY() + " " + simulation.creatureList.get(i).getSpecies().getName());
-        }
-        simulation.generateMap();
     }
 } //TODO ruszanie się do jedzenia
 

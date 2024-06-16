@@ -17,10 +17,10 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @param creatureList List of the entire population
      * @return true Returns true if breeding behavior is possible
      */
-    protected boolean isBreedingEnabled(Creature creature, List<Creature> creatureList) {
+    protected boolean isBreedingEnabled(Creature creature, List<Creature> creatureList, char [][] surfaceLayer, int[] tab) {
         for (int i=0; i<creatureList.size(); i++){
-            if (creatureList.get(i).getX()== chooseBreedingSpot(creature, creatureList)[0] &&
-                    creatureList.get(i).getY()==chooseBreedingSpot(creature, creatureList)[1]){
+            Creature other = creatureList.get(i);
+            if ((0>tab[0] || tab[0]>=surfaceLayer.length || 0>tab[1] || tab[1]>=surfaceLayer.length) || (other.getX() == tab[0] && other.getY() == tab[1]) || surfaceLayer[tab[0]][tab[1]] == 'W'){
                 return false;
             }
         }
@@ -29,7 +29,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     /**
      * Checks if an empty spot is available and returns a boolean
      *
-     * @param creature The object to check its' surroundings for an empty spot
+     * @param creature The object to check its surroundings for an empty spot
      * @param creatureList List of the entire population
      * @return true Returns true if an empty spot is available
      */
@@ -50,38 +50,38 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * Chooses a spot around creature and returns an integer array
      *
      * @param creature The object to choose a surrounding spot of
-     * @param creatureList List of the entire population
      * @return the coordinates for the new creature to appear
      */
-    private int[] chooseBreedingSpot(Creature creature, List<Creature> creatureList){
-        int x;
-        int y;
+    private int[] chooseBreedingSpot(Creature creature, char[][] surfaceLayer){
+        int x = creature.getX();
+        int y = creature.getY();
+        double i = random.nextDouble();
 
-        if(creature.getX()!=0){
-            x=creature.getX()-1;
-        } else{
+        if(creature.getX()<=0 && i>0.5){
             x=creature.getX()+1;
-        }
-
-        if(creature.getY()!=0){
-            y=creature.getY()-1;
-        } else{
+        } else if(creature.getX()<surfaceLayer.length) {
+            x=creature.getX()-1;
+        } else if(creature.getY()<=0 && i>0.5){
             y=creature.getY()+1;
+        } else if(creature.getX()<surfaceLayer.length){
+            y=creature.getY()-1;
         }
-        return new int[]{x,y};
+        int[] tab = {x, y};
+        return tab;
     }
     /**
      * Checks if an enemy is near, returns a boolean
+     *
      *
      * @param creature The object to check surroundings of
      * @param creatureList List of the entire population to iterate through
      * @return true Returns true if an enemy is near; breeding behavior not possible / Returns false if breeding behavior is possible
      */
     protected boolean isEnemyNear(Creature creature, List<Creature> creatureList) {
-        for (Creature value : creatureList) {
-            if (enemyFoodUtility.isEnemy(creature, value)) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
-                if (dist <= Math.sqrt(8)) {
+        for (Creature other : creatureList) {
+            if (enemyFoodUtility.isEnemy(creature, other)) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - other.getX(), 2) + Math.pow(creature.getY() - other.getY(), 2));
+                if (dist < 3) {
                     return true;
                 }
             }
@@ -96,10 +96,10 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @return true Returns true if a potential partner is near
      */
     protected boolean isPartnerNear(Creature creature, List<Creature> creatureList) {
-        for (Creature value : creatureList) {
-            if (creature.getSpecies() == value.getSpecies()) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
-                if (dist <= Math.sqrt(2)) {
+        for (Creature other : creatureList) {
+            if (creature.getSpecies() == other.getSpecies()) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - other.getX(), 2) + Math.pow(creature.getY() - other.getY(), 2));
+                if (dist>0 && dist < 2) {
                     return true;
                 }
             }
@@ -135,17 +135,17 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     private Creature chooseSecondParent (Creature creature, List<Creature> creatureList){
         Creature secondParent;
         List<Creature> potentialParents = new ArrayList<Creature>();
-        for (Creature value : creatureList) {
-            if (creature.getSpecies() == value.getSpecies()) {
-                double dist = Math.sqrt(Math.pow(creature.getX() - value.getX(), 2) + Math.pow(creature.getY() - value.getY(), 2));
-                if (dist <= Math.sqrt(2)) {
-                    if (value.isBreedingEnabled())
-                        potentialParents.add(value);
+        for (Creature other : creatureList) {
+            if (creature.getSpecies() == other.getSpecies()) {
+                double dist = Math.sqrt(Math.pow(creature.getX() - other.getX(), 2) + Math.pow(creature.getY() - other.getY(), 2));
+                if (dist <= Math.sqrt(2) && dist > 0) {
+                    if (other.getBreedingEnabled())
+                        potentialParents.add(other);
                 }
             }
         }
         if (!potentialParents.isEmpty()) {
-            secondParent = potentialParents.get(0);
+            secondParent = potentialParents.get(random.nextInt(potentialParents.size()));
             return secondParent;
         }
         return creature;
@@ -157,22 +157,22 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @param secondParent The second parent of the new creature
      * @param creatureList List of the entire population to iterate through
      */
-    protected void breed(Creature creature, Creature secondParent, List<Creature> creatureList) {
-        while(creature.isBreedingEnabled() || secondParent.isBreedingEnabled()){
-            if(isBreedingEnabled(creature, creatureList)){
-                Creature baby = new Creature(creature.getSpecies());
-                baby.setX(chooseBreedingSpot(creature, creatureList)[0]);
-                baby.setY(chooseBreedingSpot(creature, creatureList)[1]);
-                creatureList.add(baby);
-                creature.setBreedingEnabled(false);
-                secondParent.setBreedingEnabled(false);
-                baby.setBreedingEnabled(false);
-                baby.setSpeed(0);
-                creature.setSpeed(0);
-                secondParent.setSpeed(0);
-            }
+    protected void breed(Creature creature, Creature secondParent, List<Creature> creatureList, char[][] surfaceLayer) {
+        int tab[] = chooseBreedingSpot(creature, surfaceLayer);
+        if(isBreedingEnabled(creature, creatureList, surfaceLayer, tab) && creature.getBreedingEnabled() && secondParent.getBreedingEnabled()){
+            Creature baby = new Creature(creature.getSpecies());
+            baby.setX(tab[0]);
+            baby.setY(tab[1]);
+            creatureList.add(baby);
+            creature.setBreedingEnabled(false);
+            secondParent.setBreedingEnabled(false);
+            baby.setBreedingEnabled(false);
+            baby.setSpeed(0);
+            creature.setSpeed(0);
+            secondParent.setSpeed(0);
         }
     }
+
     /**
      * Checks for all conditions for breeding and performs the breeding behavior
      *
@@ -180,14 +180,16 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @param creatureList List of the entire population
      */
     @Override
-    public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount) {
+    public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount, char[][] surfaceLayer) {
         if (isEmptySpotAround(creature, creatureList) &&
                 !isEnemyNear(creature, creatureList) &&
                 isPartnerNear(creature, creatureList) &&
                 drawBreedingChance(creature) &&
                 !isMaxPopulationReached(creature, populationCount)){
-            breed(creature, chooseSecondParent(creature, creatureList), creatureList);
+            breed(creature, chooseSecondParent(creature, creatureList), creatureList, surfaceLayer);
         }
     }
-
+    public void setEnemyFoodUtility(EnemyFoodUtility enemyFoodUtility) {
+        this.enemyFoodUtility = enemyFoodUtility;
+    }
 }
