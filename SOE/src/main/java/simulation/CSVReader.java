@@ -19,11 +19,13 @@ public class CSVReader {
     public static ArrayList<Integer> readFromCsv(String path)
     {
         try {
+
             ArrayList<Integer> arList = new ArrayList<>();
             Scanner scanner = new Scanner(new File(path));
             String scanned = scanner.nextLine();
             scanner.close();
-            scanned = scanned.substring(1, scanned.length());
+            //code below is not necessary, but in some csv files it helps not to catch NumberFormatException
+            //scanned = scanned.substring(1, scanned.length());
             String[] tabOfStrings = scanned.split(";");
 
             for (String s: tabOfStrings) {
