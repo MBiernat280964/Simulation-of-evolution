@@ -35,7 +35,7 @@ public abstract class BaseFightLogic implements FightLogic{
         hp = other.getHp();
         hp--;
         other.setHp(hp);
-        if (hp == 0){
+        if (hp <= 0){
             creatureList.remove(other);
         }
     }

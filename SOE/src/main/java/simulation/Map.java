@@ -69,24 +69,24 @@ public class Map {
      * Generates map biome: river
      */
     void genMapRiver() {
-        for (int i = 0; i < sizeOfMap; i++){
-            for (int j = 0; j<sizeOfMap/2; j++){
-                map[0][j][i] = 'W';
-                map [0][sizeOfMap/2+j][i] = 'L';
-            }
-        }
-//        for (int i = 0; i < sizeOfMap; i++) {
-//            for (int j = 0; j < sizeOfMap; j++) {
-//                if (4*Math.sin(((float)j/5)) + 34 >= i){
-//                    this.map[0][i][j] = 'W';
-//                } else {
-//                    this.map[0][i][j] = 'L';
-//                }
-//                if (4*Math.sin(((float)j/5)) + 20 >= i){
-//                    this.map[0][i][j] = 'L';
-//                }
+//        for (int i = 0; i < sizeOfMap; i++){
+//            for (int j = 0; j<sizeOfMap/2; j++){
+//                map[0][j][i] = 'W';
+//                map [0][sizeOfMap/2+j][i] = 'L';
 //            }
 //        }
+        for (int i = 0; i < sizeOfMap; i++) {
+            for (int j = 0; j < sizeOfMap; j++) {
+                if (4*Math.sin(((float)j/5)) + 34 >= i){
+                    this.map[0][i][j] = 'W';
+                } else {
+                    this.map[0][i][j] = 'L';
+                }
+                if (4*Math.sin(((float)j/5)) + 20 >= i){
+                    this.map[0][i][j] = 'L';
+                }
+            }
+        }
     }
     /**
      * Generates map biome: island

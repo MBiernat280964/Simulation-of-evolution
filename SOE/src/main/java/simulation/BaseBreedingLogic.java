@@ -114,7 +114,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @return true Returns true if max population has been reached
      */
     protected boolean isMaxPopulationReached(Creature creature, int populationCount) {
-        return populationCount == creature.getSpecies().getMaxPopulation();
+        return populationCount >= creature.getSpecies().getMaxPopulation();
     }
     /**
      * Returns if breeding can occur based on random chance

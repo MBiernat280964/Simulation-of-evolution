@@ -45,7 +45,7 @@ public class Simulation {
         cockroach = new Species(2, 1, "Cockroach", 2, (int)(populationFactor * 1.5), 'c', 4);
         human = new Species(3, 2, "Human", 4, (int)(populationFactor * 2), 'h', 8);
         dinosaur = new Species(2, 4, "Dinosaur", 2, (int)(populationFactor), 'd', 10);
-        fish = new Species(6, 1, "Fish", 8, (int)(populationFactor * 1.5), 'f', 4);
+        fish = new Species(6, 1, "Fish", 8, (int)(populationFactor * 2), 'f', 4);
 
 
         speciesList = new ArrayList<>();
@@ -296,7 +296,7 @@ public class Simulation {
     }
 
     public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(100 , mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(50 , mapCrFromGUI, mapNameFromGUI);
         simulation.map = new Map(simulation.mapName);
 
         simulation.initSpecies();
