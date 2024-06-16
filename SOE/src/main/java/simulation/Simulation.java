@@ -1,8 +1,6 @@
 package simulation;
 
 import java.util.*;
-//TODO x jak coś umiera innym kolorem, innym kolorem urodzone, w i l w innym kolorze
-
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
  * It is responsible for creation and deletion of Creatures instances and updating map from Map instance
@@ -176,40 +174,8 @@ public class Simulation {
         initCreature(dinosaur);
         updateMap(creatureList);
     }
-
-    boolean moving (){
-        boolean somebodyMoves = false;
-        for (int i=0; i <creatureList.size(); i++){
-            Creature creature = creatureList.get(i);
-            if (map.map[0][creature.getX()][creature.getY()] == 'W'){
-                map.map[1][creature.getX()][creature.getY()] = 'W';
-            } else {
-                map.map[1][creature.getX()][creature.getY()] = 'L';
-            }
-            if (creature.getSpeed() > 0){
-                if (creature.getSpecies() == fish) {
-                    fishMovement.performSingleStep(creature, creatureList, map.map[0]);
-                    somebodyMoves = true;
-                } else if (creature.getSpecies() == bird) {
-                    birdMovement.performSingleStep(creature, creatureList, map.map[0]);
-                    somebodyMoves = true;
-                } else if(creature.getSpecies() == dinosaur) {
-                    aggressiveMovement.performSingleStep(creature, creatureList, map.map[0]);
-                    somebodyMoves = true;
-                } else {
-                    defaultMovement.performSingleStep(creature, creatureList, map.map[0]);
-                    somebodyMoves = true;
-                }
-                creature.setSpeed(creature.getSpeed() - 1);
-            }
-            updateMap(creatureList);
-        }
-        return somebodyMoves;
-    }
-
-    void moving2 (){
+    void moving(){
         for(int j=10; j>0; j--){
-
             for (int i=0; i <creatureList.size(); i++){
                 Creature creature = creatureList.get(i);
                 double remainingPower = (double)creature.getSpeed()/(double)creature.getSpecies().getSpeed();
@@ -272,7 +238,7 @@ public class Simulation {
             updateMap(creatureList);
             printMap(-1);
 //            while (moving());
-            moving2();
+            moving();
             while (fighting());
             updateMap(creatureList);
             printMap(year);
@@ -337,6 +303,12 @@ public class Simulation {
         simulation.firstAddToMap();
         simulation.generateMap();
         simulation.simulationCycle();
+
+        for (int i=0; i<simulation.speciesList.size(); i++){
+            Species species = simulation.speciesList.get(i);
+            System.out.println("Count of " + species.getName() + ": " + simulation.getCreatureCount(species));
+        }
+        System.out.println("The winner is: " + simulation.winSpecies().getName());
     }
 }
 
