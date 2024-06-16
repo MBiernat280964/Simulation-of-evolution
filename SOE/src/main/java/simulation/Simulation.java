@@ -1,6 +1,15 @@
 package simulation;
 
+<<<<<<< HEAD
 import java.util.*;
+=======
+import javax.swing.*;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.Timer;
+//TODO x jak coś umiera innym kolorem, innym kolorem urodzone, w i l w innym kolorze
+
+>>>>>>> bf4f05666654e97b718868371cf41a34963aaa0c
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
  * It is responsible for creation and deletion of Creatures instances and updating map from Map instance
@@ -227,6 +236,7 @@ public class Simulation {
 
     void simulationCycle()
     {
+        MapWindow mapWindow = new MapWindow(TUTAJ MA BYC MAPA, new JFrame("Mapeczka"));
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
@@ -243,11 +253,26 @@ public class Simulation {
             updateMap(creatureList);
             printMap(year);
 
-            for (int i=0; i<map.sizeOfMap; i++){
-                for (int j=0; j<map.sizeOfMap; j++){
+
+            for (int i = 0; i< Map.sizeOfMap; i++){
+                for (int j = 0; j< Map.sizeOfMap; j++){
                     map.map[1][i][j]='\0';
                 }
             }
+            Timer timer = new Timer();
+            TimerTask tt = new TimerTask() {
+                int i = 0;
+                public void run()
+                {
+                    i++;
+                    mapWindow.updateDisplay();
+                    if (i >= Simulation.years) {
+                        timer.cancel();
+                        mapWindow.frame.dispose();
+                    }
+                };
+            };
+            timer.schedule(tt, 1000, 1000);
         }
     }
 
