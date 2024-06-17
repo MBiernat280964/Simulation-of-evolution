@@ -14,8 +14,9 @@ public class MapWindow {
         prepareGUI(map);
     }
     public static void main(String[] args) {
-        Map mapka = new Map("island");
+        Map mapka = new Map("riverside");
         MapWindow window = new MapWindow(mapka.map,new JFrame("Mapeczka"));
+
     }
 
     private void prepareGUI(char [][][] map) {
@@ -26,44 +27,46 @@ public class MapWindow {
         for (int i = 0; i < Map.sizeOfMap ; i++) {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
                 jPanelArray[i][j] = new JPanel();
-                if (map[1][i][j] != '\0') {
-                    jPanelArray[i][j].setBackground(Color.pink);
-                }else if (map[0][i][j] == 'L') {
-                    jPanelArray[i][j].setBackground(Color.green);
-                }
-                else {
-                    jPanelArray[i][j].setBackground(Color.blue);
-                }
+                setBackground(i, j, map);
                 frame.add(jPanelArray[i][j]);
             }
         }
         frame.setVisible(true);
+        frame.repaint();
+        System.out.println();
     }
 
     public void updateDisplay(char [][][] map) {
-        for (int i = 0; i < Map.sizeOfMap; i++) {
-            for (int j = 0; j < Map.sizeOfMap; j++) {
-                if (map[1][i][j] == 0) {
-                    System.out.print(map [0][i][j] + " ");
-                } else if (map[1][i][j] == 'W' || map[1][i][j] == 'L') {
-                    System.out.print("\u001B[36m" + map[1][i][j] + " \u001B[0m");
-                } else  if (map[1][i][j] == 'x') {
-                    System.out.print("\u001B[37m" + map [1][i][j] + " \u001B[0m");
-                } else
-                    System.out.print("\u001B[31m" + map [1][i][j] + " \u001B[0m");
-            }
-            System.out.print("\n");
-        }
         for (int i = 0; i < Map.sizeOfMap ; i++) {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
-                if (map[1][i][j] == '\0') {
-                    jPanelArray[i][j].setBackground(Color.white);
-                } else if (map[0][i][j] == 'L') {
-                    jPanelArray[i][j].setBackground(Color.green);
-                } else {
-                    jPanelArray[i][j].setBackground(Color.blue);
-                }
+                setBackground(i, j, map);
             }
+        }
+    }
+
+    private void setBackground(int i, int j, char [][][] map) {
+        Color background = getColor(map[1][i][j], map[0][i][j]);
+        jPanelArray[i][j].setBackground(background);
+    }
+
+    private Color getColor(char creatureLayer, char surfaceLayer){
+        switch (creatureLayer){
+            case 'L':
+                return new Color(122, 255, 100);//lime
+            case 'W':
+                return Color.CYAN;
+            case '\0':
+                //go to surfaceLayer;
+                break;
+            default:
+                return  Color.WHITE;
+        }
+        switch (surfaceLayer){
+            case 'L':
+                return Color.GREEN;
+            case 'W':
+            default:
+                return  Color.BLUE;
         }
     }
 }

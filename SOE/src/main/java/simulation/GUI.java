@@ -163,6 +163,7 @@ public class GUI extends JFrame {
                                                 .addComponent(label9)
                                                 .addGap(67, 67, 67))))
         );
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()

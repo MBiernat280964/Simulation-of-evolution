@@ -1,5 +1,7 @@
 package simulation;
 import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.*;
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
@@ -33,6 +35,9 @@ public class Simulation {
     Species human;
     Species dinosaur;
     Species fish;
+
+    private MapWindow mapWindow = null;
+
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
         this.mapOfCreatures = mapOfCreatures;
@@ -227,11 +232,9 @@ public class Simulation {
 
     void simulationCycle()
     {
-//        MapWindow mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
-//        try {
-//            wait(SLEEP_TIME_MILLIS);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
+//        if(mapWindow == null){
+//            mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
+//            printMap(-1);
 //        }
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
@@ -242,30 +245,12 @@ public class Simulation {
             }
             breeding();
             printMap(year);
-//            mapWindow.updateDisplay(map.map);
-//            try {
-//                wait(SLEEP_TIME_MILLIS);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
             updateMap(creatureList);
             printMap(-1);
             moving();
-//            mapWindow.updateDisplay(map.map);
-//            try {
-//                wait(SLEEP_TIME_MILLIS);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
             while (fighting());
             updateMap(creatureList);
             printMap(year);
-//            mapWindow.updateDisplay(map.map);
-//            try {
-//                wait(SLEEP_TIME_MILLIS);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
 
             for (int i=0; i<map.sizeOfMap; i++){
                 for (int j=0; j<map.sizeOfMap; j++){
@@ -288,6 +273,8 @@ public class Simulation {
         generateMap();
 
         System.out.println();
+
+        mapWindow.updateDisplay(map.map);
     }
 
 
@@ -319,20 +306,72 @@ public class Simulation {
 
     }
 
-    public static void main(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(50 , mapCrFromGUI, mapNameFromGUI);
-        simulation.map = new Map(simulation.mapName);
+    private void init(){
+        map = new Map(mapName);
 
-        simulation.initSpecies();
-        simulation.firstAddToMap();
-        simulation.generateMap();
-        simulation.simulationCycle();
+        initSpecies();
+        firstAddToMap();
+        generateMap();
+    }
 
-        for (int i=0; i<simulation.speciesList.size(); i++){
-            Species species = simulation.speciesList.get(i);
-            System.out.println("Count of " + species.getName() + ": " + simulation.getCreatureCount(species));
+    private void globalFunction(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI){
+        simulationCycle();
+
+        for (int i=0; i<speciesList.size(); i++){
+            Species species = speciesList.get(i);
+            System.out.println("Count of " + species.getName() + ": " + getCreatureCount(species));
         }
-        System.out.println("The winner is: " + simulation.winSpecies().getName());
+        System.out.println("The winner is: " + winSpecies().getName());
+    }
+
+    public static void main (HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
+        Simulation simulation = new Simulation(50 , mapCrFromGUI, mapNameFromGUI);
+        simulation.init();
+        MapWindow mapWindow = new MapWindow(simulation.map.map,new JFrame("Mapeczka"));
+        simulation.mapWindow = mapWindow;
+        mapWindow.frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                SwingWorker<Void, Integer> worker = new SwingWorker<>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        simulation.globalFunction(mapCrFromGUI, mapNameFromGUI);
+                        return null;
+                    }
+                };
+                worker.execute();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 }
 

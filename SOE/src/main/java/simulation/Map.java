@@ -11,7 +11,7 @@ import java.lang.Math;
 public class Map {
     static final public int sizeOfMap = 24;
 
-    static char [][][] map = new char [2][sizeOfMap][sizeOfMap];
+    char [][][] map = new char [2][sizeOfMap][sizeOfMap];
 
     /**
      * Constructor for Map class
