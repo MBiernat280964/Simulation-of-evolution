@@ -14,7 +14,7 @@ public class Simulation {
     private static final long SLEEP_TIME_MILLIS = 500;
 
     Map map;
-    private static int years = 100;     // default: from user input
+    private static int years = 10;
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
 
@@ -232,10 +232,6 @@ public class Simulation {
 
     void simulationCycle()
     {
-//        if(mapWindow == null){
-//            mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
-//            printMap(-1);
-//        }
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
@@ -314,20 +310,25 @@ public class Simulation {
         generateMap();
     }
 
-    private void globalFunction(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI){
+    //TODO: usun okienko map window i zacznij ending window
+    private void globalFunction(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI, JFrame frame){
         simulationCycle();
 
         for (int i=0; i<speciesList.size(); i++){
             Species species = speciesList.get(i);
             System.out.println("Count of " + species.getName() + ": " + getCreatureCount(species));
         }
-        System.out.println("The winner is: " + winSpecies().getName());
+        String nameOfWinner = winSpecies().getName();
+        System.out.println("The winner is: " + nameOfWinner);
+        frame.dispose();
+        EndingWindow endingWindow = new EndingWindow(mapOfCreatures,nameOfWinner);
     }
 
     public static void main (HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
-        Simulation simulation = new Simulation(50 , mapCrFromGUI, mapNameFromGUI);
+        Simulation simulation = new Simulation(years , mapCrFromGUI, mapNameFromGUI);
         simulation.init();
-        MapWindow mapWindow = new MapWindow(simulation.map.map,new JFrame("Mapeczka"));
+        JFrame frame = new JFrame("Map view");
+        MapWindow mapWindow = new MapWindow(simulation.map.map,frame);
         simulation.mapWindow = mapWindow;
         mapWindow.frame.addWindowListener(new WindowListener() {
             @Override
@@ -335,7 +336,7 @@ public class Simulation {
                 SwingWorker<Void, Integer> worker = new SwingWorker<>() {
                     @Override
                     protected Void doInBackground() throws Exception {
-                        simulation.globalFunction(mapCrFromGUI, mapNameFromGUI);
+                        simulation.globalFunction(mapCrFromGUI, mapNameFromGUI, frame);
                         return null;
                     }
                 };

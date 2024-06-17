@@ -13,11 +13,6 @@ public class MapWindow {
         this.frame = frame;
         prepareGUI(map);
     }
-    public static void main(String[] args) {
-        Map mapka = new Map("riverside");
-        MapWindow window = new MapWindow(mapka.map,new JFrame("Mapeczka"));
-
-    }
 
     private void prepareGUI(char [][][] map) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,6 +50,16 @@ public class MapWindow {
                 return new Color(122, 255, 100);//lime
             case 'W':
                 return Color.CYAN;
+            case 'b':
+                return Color.BLACK;
+            case 'c':
+                return Color.RED;
+            case 'd':
+                return Color.MAGENTA;
+            case 'f':
+                return Color.ORANGE;
+            case 'h':
+                return Color.YELLOW;
             case '\0':
                 //go to surfaceLayer;
                 break;

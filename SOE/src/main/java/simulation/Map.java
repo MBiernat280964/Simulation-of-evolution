@@ -20,7 +20,7 @@ public class Map {
         chooseGenerator(biome);
     }
 
-    void chooseGenerator(String biome) {
+    private void chooseGenerator(String biome) {
         if (biome.equals("riverside")) {
             genMapRiver();
         } else if (biome.equals("lake")) {
@@ -69,12 +69,6 @@ public class Map {
      * Generates map biome: river
      */
     private void genMapRiver() {
-//        for (int i = 0; i < sizeOfMap; i++){
-//            for (int j = 0; j<sizeOfMap/2; j++){
-//                map[0][j][i] = 'W';
-//                map [0][sizeOfMap/2+j][i] = 'L';
-//            }
-//        }
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
                 if (4*Math.sin(((float)j/5)) + 34 >= i){
