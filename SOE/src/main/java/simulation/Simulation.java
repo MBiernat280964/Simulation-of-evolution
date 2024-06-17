@@ -1,5 +1,5 @@
 package simulation;
-
+import javax.swing.*;
 import java.util.*;
 /**
  * Object <code>Simulation</code> handles simulation of evolution, cooperates with Object Map
@@ -11,7 +11,7 @@ public class Simulation {
 
     private static final long SLEEP_TIME_MILLIS = 500;
 
-    Map map;
+    Map map = new Map("riverside");
     private static int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
@@ -227,6 +227,7 @@ public class Simulation {
 
     void simulationCycle()
     {
+        MapWindow mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
@@ -235,12 +236,15 @@ public class Simulation {
                 map.map[1][creature.getX()][creature.getY()] = '\0';
             }
             breeding();
+            mapWindow.updateDisplay(map.map);
             updateMap(creatureList);
             printMap(-1);
             moving();
+            mapWindow.updateDisplay(map.map);
             while (fighting());
             updateMap(creatureList);
             printMap(year);
+            mapWindow.updateDisplay(map.map);
 
             for (int i=0; i<map.sizeOfMap; i++){
                 for (int j=0; j<map.sizeOfMap; j++){
@@ -262,6 +266,7 @@ public class Simulation {
             System.out.println("year: " + (year + 1));
         }
         generateMap();
+
         System.out.println();
     }
 

@@ -11,47 +11,50 @@ public class MapWindow {
     public MapWindow(char [][][] map, JFrame frame) {
         this.map = map;
         this.frame = frame;
-        prepareGUI();
+        prepareGUI(map);
     }
     public static void main(String[] args) {
         Map mapka = new Map("island");
         MapWindow window = new MapWindow(mapka.map,new JFrame("Mapeczka"));
     }
 
-    private void prepareGUI() {
+    private void prepareGUI(char [][][] map) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLayout(new GridLayout(Map.sizeOfMap,Map.sizeOfMap));
         frame.setLocationRelativeTo(null);
         for (int i = 0; i < Map.sizeOfMap ; i++) {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
-                this.jPanelArray[i][j] = new JPanel();
-                if (this.map[1][i][j] != '\0') {
-                    this.jPanelArray[i][j].setBackground(Color.pink);
-                }else if (this.map[0][i][j] == 'L') {
-                    this.jPanelArray[i][j].setBackground(Color.green);
+                jPanelArray[i][j] = new JPanel();
+                if (map[1][i][j] != '\0') {
+                    jPanelArray[i][j].setBackground(Color.pink);
+                }else if (map[0][i][j] == 'L') {
+                    jPanelArray[i][j].setBackground(Color.green);
                 }
                 else {
-                    this.jPanelArray[i][j].setBackground(Color.blue);
+                    jPanelArray[i][j].setBackground(Color.blue);
                 }
-                frame.add(this.jPanelArray[i][j]);
+                frame.add(jPanelArray[i][j]);
             }
         }
         frame.setVisible(true);
     }
 
-    public void updateDisplay() {
+    public void updateDisplay(char [][][] map) {
+        frame.setVisible(false);
         for (int i = 0; i < Map.sizeOfMap ; i++) {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
-                if (this.map[1][i][j] != '\0') {
-                    this.jPanelArray[i][j].setBackground(Color.white);
-                } else if (this.map[0][i][j] == 'L') {
-                    this.jPanelArray[i][j].setBackground(Color.green);
+                if (map[1][i][j] == '\0') {
+                    jPanelArray[i][j].setBackground(Color.white);
+                } else if (map[0][i][j] == 'L') {
+                    jPanelArray[i][j].setBackground(Color.green);
                 } else {
-                    this.jPanelArray[i][j].setBackground(Color.blue);
+                    jPanelArray[i][j].setBackground(Color.blue);
                 }
             }
         }
+        frame.setVisible(true);
+
 
     }
 }
