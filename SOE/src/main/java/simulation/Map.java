@@ -55,9 +55,9 @@ public class Map {
     private void genMapLake() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
-                if (i >= (j-sizeOfMap/2)*(j-sizeOfMap/2)/20 + 15 &&
-                        (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/20 +30 > 0 &&
-                        i <= (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +3*sizeOfMap/4){
+                if (i >= (j-sizeOfMap/2)*(j-sizeOfMap/2)/20 + 7 &&
+                        (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/20 +10 > 0 &&
+                        i <= (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +sizeOfMap - 4){
                     map[0][i][j] = 'W';
                 } else {
                     map[0][i][j] = 'L';
@@ -71,12 +71,12 @@ public class Map {
     private void genMapRiver() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
-                if (4*Math.sin(((float)j/5)) + 34 >= i){
+                if (4*Math.sin(((float)j/3)) + 15 >= i){
                     map[0][i][j] = 'W';
                 } else {
                     map[0][i][j] = 'L';
                 }
-                if (4*Math.sin(((float)j/5)) + 20 >= i){
+                if (4*Math.sin(((float)j/3.3F)) + 10 >= i){
                     map[0][i][j] = 'L';
                 }
             }
