@@ -11,7 +11,7 @@ public class Simulation {
 
     private static final long SLEEP_TIME_MILLIS = 500;
 
-    Map map = new Map("riverside");
+    Map map;
     private static int years = 100;     // default: from user input
     HashMap<Character, Integer> mapOfCreatures;
     String mapName = "lake";
@@ -227,7 +227,12 @@ public class Simulation {
 
     void simulationCycle()
     {
-        MapWindow mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
+//        MapWindow mapWindow = new MapWindow(map.map,new JFrame("Mapeczka"));
+//        try {
+//            wait(SLEEP_TIME_MILLIS);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         for (int year=0; year < this.years; year++) {
             for (Creature creature : creatureList) {
                 creature.setSpeed(creature.getSpecies().getSpeed());
@@ -236,15 +241,31 @@ public class Simulation {
                 map.map[1][creature.getX()][creature.getY()] = '\0';
             }
             breeding();
-            mapWindow.updateDisplay(map.map);
+            printMap(year);
+//            mapWindow.updateDisplay(map.map);
+//            try {
+//                wait(SLEEP_TIME_MILLIS);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
             updateMap(creatureList);
             printMap(-1);
             moving();
-            mapWindow.updateDisplay(map.map);
+//            mapWindow.updateDisplay(map.map);
+//            try {
+//                wait(SLEEP_TIME_MILLIS);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
             while (fighting());
             updateMap(creatureList);
             printMap(year);
-            mapWindow.updateDisplay(map.map);
+//            mapWindow.updateDisplay(map.map);
+//            try {
+//                wait(SLEEP_TIME_MILLIS);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
 
             for (int i=0; i<map.sizeOfMap; i++){
                 for (int j=0; j<map.sizeOfMap; j++){
@@ -256,7 +277,6 @@ public class Simulation {
 
     private void printMap(int year){
         updateMap(creatureList);
-//        scanner.nextLine();
         try{
             Thread.sleep(SLEEP_TIME_MILLIS);
         } catch(InterruptedException e){

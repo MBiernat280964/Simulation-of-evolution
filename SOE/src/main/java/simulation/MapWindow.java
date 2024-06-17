@@ -41,7 +41,19 @@ public class MapWindow {
     }
 
     public void updateDisplay(char [][][] map) {
-        frame.setVisible(false);
+        for (int i = 0; i < Map.sizeOfMap; i++) {
+            for (int j = 0; j < Map.sizeOfMap; j++) {
+                if (map[1][i][j] == 0) {
+                    System.out.print(map [0][i][j] + " ");
+                } else if (map[1][i][j] == 'W' || map[1][i][j] == 'L') {
+                    System.out.print("\u001B[36m" + map[1][i][j] + " \u001B[0m");
+                } else  if (map[1][i][j] == 'x') {
+                    System.out.print("\u001B[37m" + map [1][i][j] + " \u001B[0m");
+                } else
+                    System.out.print("\u001B[31m" + map [1][i][j] + " \u001B[0m");
+            }
+            System.out.print("\n");
+        }
         for (int i = 0; i < Map.sizeOfMap ; i++) {
             for ( int j = 0; j < Map.sizeOfMap ; j++) {
                 if (map[1][i][j] == '\0') {
@@ -53,8 +65,5 @@ public class MapWindow {
                 }
             }
         }
-        frame.setVisible(true);
-
-
     }
 }

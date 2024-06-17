@@ -90,7 +90,7 @@ public abstract class BaseMovementLogic implements MovementLogic{
         } else if (!food.isEmpty()) {
             other = food.get(random.nextInt(food.size()));
             goForward = 1;
-        }  else if(!friends.isEmpty()) {
+        }  else if(!friends.isEmpty() && random.nextDouble()<0.8) {
             other = friends.get(random.nextInt(friends.size()));
             goForward = 1;
         } else {
