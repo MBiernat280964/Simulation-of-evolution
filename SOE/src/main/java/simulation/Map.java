@@ -37,13 +37,13 @@ public class Map {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
                 if (map[1][i][j] == 0) {
-                    System.out.print(this.map [0][i][j] + " ");
+                    System.out.print(map [0][i][j] + " ");
                 } else if (map[1][i][j] == 'W' || map[1][i][j] == 'L') {
-                    System.out.print("\u001B[36m" + this.map[1][i][j] + " \u001B[0m");
+                    System.out.print("\u001B[36m" + map[1][i][j] + " \u001B[0m");
                 } else  if (map[1][i][j] == 'x') {
-                    System.out.print("\u001B[37m" + this.map [1][i][j] + " \u001B[0m");
+                    System.out.print("\u001B[37m" + map [1][i][j] + " \u001B[0m");
                 } else
-                    System.out.print("\u001B[31m" + this.map [1][i][j] + " \u001B[0m");
+                    System.out.print("\u001B[31m" + map [1][i][j] + " \u001B[0m");
             }
             System.out.print("\n");
         }
@@ -52,15 +52,15 @@ public class Map {
     /**
      * Generates map biome: lake
      */
-    void genMapLake() {
+    private void genMapLake() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
                 if (i >= (j-sizeOfMap/2)*(j-sizeOfMap/2)/20 + 15 &&
                         (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/20 +30 > 0 &&
                         i <= (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +3*sizeOfMap/4){
-                    this.map[0][i][j] = 'W';
+                    map[0][i][j] = 'W';
                 } else {
-                    this.map[0][i][j] = 'L';
+                    map[0][i][j] = 'L';
                 }
             }
         }
@@ -68,7 +68,7 @@ public class Map {
     /**
      * Generates map biome: river
      */
-    void genMapRiver() {
+    private void genMapRiver() {
 //        for (int i = 0; i < sizeOfMap; i++){
 //            for (int j = 0; j<sizeOfMap/2; j++){
 //                map[0][j][i] = 'W';
@@ -78,12 +78,12 @@ public class Map {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
                 if (4*Math.sin(((float)j/5)) + 34 >= i){
-                    this.map[0][i][j] = 'W';
+                    map[0][i][j] = 'W';
                 } else {
-                    this.map[0][i][j] = 'L';
+                    map[0][i][j] = 'L';
                 }
                 if (4*Math.sin(((float)j/5)) + 20 >= i){
-                    this.map[0][i][j] = 'L';
+                    map[0][i][j] = 'L';
                 }
             }
         }
@@ -91,15 +91,15 @@ public class Map {
     /**
      * Generates map biome: island
      */
-    void genMapIsland() {
+    private void genMapIsland() {
         for (int i = 0; i < sizeOfMap; i++) {
             for (int j = 0; j < sizeOfMap; j++) {
                 if (i >= (j-sizeOfMap/2)*(j-sizeOfMap/2)/20 + 5 &&
                         (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/20 +30 > 0 &&
                         i <= (-(j-sizeOfMap/2)*(j-sizeOfMap/2))/4 +sizeOfMap - 4){
-                    this.map[0][i][j] = 'L';
+                    map[0][i][j] = 'L';
                 } else {
-                    this.map[0][i][j] = 'W';
+                    map[0][i][j] = 'W';
                 }
             }
         }
