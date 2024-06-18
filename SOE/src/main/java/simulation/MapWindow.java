@@ -85,6 +85,8 @@ public class MapWindow {
             case '\0':
                 //go to surfaceLayer;
                 break;
+            case 'w':
+                return Color.PINK;
             default:
                 return  Color.WHITE;
         }

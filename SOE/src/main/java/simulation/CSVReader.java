@@ -14,7 +14,7 @@ public class CSVReader {
     /**
      * function read from csv file and saves and returns integers in an arrayList
      * @param path path of csv file that will be read from
-     * @return ArrayList containing number of creatures, years od simulation and biome as following: wolf, human, cockroach, dino, bird, fish, years, biome (1-riverside, 2-island, 3-lake)
+     * @return ArrayList containing number of creatures and biome as following: wolf, human, cockroach, dino, bird, fish, biome (1-riverside, 2-island, 3-lake)
      */
     public static ArrayList<Integer> readFromCsv(String path)
     {
@@ -29,7 +29,9 @@ public class CSVReader {
             String[] tabOfStrings = scanned.split(";");
 
             for (String s: tabOfStrings) {
-                arList.add(Integer.parseInt(s));
+                Integer i = Integer.parseInt(s);
+                arList.add(i);
+                //arList.add(Integer.parseInt(s.replaceAll("\\s+", "")));
             }
             return arList;
         } catch (FileNotFoundException e) {

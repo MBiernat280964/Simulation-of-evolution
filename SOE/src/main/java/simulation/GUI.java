@@ -73,6 +73,13 @@ public class GUI extends JFrame {
                     mapOfCreatures.put((Character) 'd', arr.get(3));
                     mapOfCreatures.put((Character) 'b', arr.get(4));
                     mapOfCreatures.put((Character) 'f', arr.get(5));
+                    Integer j = arr.get(6);
+                    if (j == 1)
+                        mapName = "riverside";
+                    else if (j == 2)
+                        mapName = "island";
+                    else if (j == 3)
+                        mapName = "lake";
                 }
                 else
                 {
@@ -227,12 +234,12 @@ public class GUI extends JFrame {
     JLabel label6 = new JLabel("Dinos");
     JLabel label7 = new JLabel("Bird");
     JLabel label8 = new JLabel("Fish");
-    JSpinner l1 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l2 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l3 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l4 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l5 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
-    JSpinner l6 = new JSpinner(new SpinnerNumberModel(1, 1, 300, 1));
+    JSpinner l1 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+    JSpinner l2 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+    JSpinner l3 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+    JSpinner l4 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+    JSpinner l5 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+    JSpinner l6 = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
     JTextArea textToInput = new JTextArea();
     JLabel label9 = new JLabel("or read from file (input path on your computer)");
     JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
