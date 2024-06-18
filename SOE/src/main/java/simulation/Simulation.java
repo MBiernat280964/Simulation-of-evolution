@@ -37,12 +37,17 @@ public class Simulation {
     Species fish;
 
     private MapWindow mapWindow = null;
-
+    /**
+     *
+     */
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
         this.mapOfCreatures = mapOfCreatures;
         this.mapName = mapName;
     }
+    /**
+     *
+     */
     private void initSpecies(){
         double populationFactor = map.sizeOfMap * map.sizeOfMap * POPULATION_FACTOR_BASE;
         wolf = new Species(2,2,"Wolf", 4, (int)(populationFactor * 2), 'w', 8);
@@ -98,11 +103,15 @@ public class Simulation {
         defaultBreed.setEnemyFoodUtility(enemyFoodMapping);
         fishBreed.setEnemyFoodUtility(enemyFoodMapping);
     }
-
+    /**
+     *
+     */
     void generateMap (){
         map.showMap();
     }
-
+    /**
+     *
+     */
     void updateMap(List<Creature> creatureList) {
         int x;
         int y;
@@ -114,7 +123,9 @@ public class Simulation {
     }
 
 
-
+    /**
+     *
+     */
     public int getCreatureCount(Species species){
         int count = 0;
         for (int i=0; i<creatureList.size(); i++){
@@ -124,7 +135,9 @@ public class Simulation {
         }
         return count;
     }
-
+    /**
+     *
+     */
     public Species winSpecies (){
         int maxCount=0;
         Species win = null;
@@ -144,7 +157,9 @@ public class Simulation {
         }
         return win;
     }
-
+    /**
+     *
+     */
     private boolean canBeHere (Species species, Creature creature){
         if (species == bird) {
             System.out.println("Bird");
@@ -158,7 +173,9 @@ public class Simulation {
         }
         return false;
     }
-
+    /**
+     *
+     */
     void initCreature (Species species){
         for (int i=0; i<mapOfCreatures.get(Character.valueOf(species.getCharacter())).intValue() ; i++){
             Creature creature = new Creature(species);
@@ -169,7 +186,9 @@ public class Simulation {
             System.out.println(creature.getX() + " " + creature.getY() + " " + creature.getSpecies().getName());
         }
     }
-
+    /**
+     *
+     */
     void firstAddToMap (){
         initCreature(wolf);
         initCreature(bird);
@@ -179,6 +198,9 @@ public class Simulation {
         initCreature(dinosaur);
         updateMap(creatureList);
     }
+    /**
+     *
+     */
     void moving(){
         for(int j=10; j>0; j--){
             for (int i=0; i <creatureList.size(); i++){
@@ -206,7 +228,9 @@ public class Simulation {
         }
     }
 
-
+    /**
+     *
+     */
     boolean fighting (){
         List<Creature> yetToFight = new ArrayList<>(creatureList);
         boolean somebodyAttacks = false;
@@ -217,7 +241,9 @@ public class Simulation {
         }
         return somebodyAttacks;
     }
-
+    /**
+     *
+     */
     void breeding (){
         List<Creature> yetToBreed = new ArrayList<>(creatureList);
         for (int i=0; i<yetToBreed.size(); i++){
@@ -229,7 +255,9 @@ public class Simulation {
             }
         }
     }
-
+    /**
+     *
+     */
     void simulationCycle()
     {
         for (int year=0; year < this.years; year++) {
@@ -255,7 +283,9 @@ public class Simulation {
             }
         }
     }
-
+    /**
+     *
+     */
     private void printMap(int year){
         updateMap(creatureList);
         try{
@@ -275,8 +305,9 @@ public class Simulation {
 
 
     /**
-     * functionvgenerateXY generates two random numbers, x and y, and puts them in an array
+     * function generateXY generates two random numbers, x and y, and puts them in an array
      * seed is current computer time in milliseconds
+     * @param creature is a current creature to generate XY coordinates for
      * @return array with first index - x coordinate and second index - y coordinate
      */
     void generateXY(Creature creature) {
@@ -291,7 +322,9 @@ public class Simulation {
         creature.setX(x);
         creature.setY(y);
     }
-
+    /**
+     *
+     */
     private boolean isFree (Creature creature, List <Creature> creatureList){
         for (int i=0; i<creatureList.size(); i++){
             if ((creatureList.get(i).getX() == creature.getX() && creatureList.get(i).getY() == creature.getY())){
@@ -301,7 +334,9 @@ public class Simulation {
         return true;
 
     }
-
+    /**
+     *
+     */
     private void init(){
         map = new Map(mapName);
 
@@ -309,8 +344,9 @@ public class Simulation {
         firstAddToMap();
         generateMap();
     }
-
-    //TODO: usun okienko map window i zacznij ending window
+    /**
+     *
+     */
     private void globalFunction(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI, JFrame frame){
         simulationCycle();
 
@@ -323,7 +359,9 @@ public class Simulation {
         frame.dispose();
         EndingWindow endingWindow = new EndingWindow(mapOfCreatures,nameOfWinner);
     }
-
+    /**
+     *
+     */
     public static void main (HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
         Simulation simulation = new Simulation(years , mapCrFromGUI, mapNameFromGUI);
         simulation.init();
