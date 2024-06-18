@@ -38,7 +38,7 @@ public class Simulation {
 
     private MapWindow mapWindow = null;
     /**
-     *
+     *Constructor for simulation
      */
     Simulation(int years, HashMap<Character,Integer> mapOfCreatures, String mapName) {
         this.years = years;
@@ -46,7 +46,7 @@ public class Simulation {
         this.mapName = mapName;
     }
     /**
-     *
+     *Adds species to the simulation
      */
     private void initSpecies(){
         double populationFactor = map.sizeOfMap * map.sizeOfMap * POPULATION_FACTOR_BASE;
@@ -104,13 +104,14 @@ public class Simulation {
         fishBreed.setEnemyFoodUtility(enemyFoodMapping);
     }
     /**
-     *
+     *Is responsible for showing map array in console
      */
     void generateMap (){
         map.showMap();
     }
     /**
-     *
+     *Updates map with creatures' new positions
+     * @param creatureList contains a list of all creatures to iterate through
      */
     void updateMap(List<Creature> creatureList) {
         int x;
@@ -124,7 +125,8 @@ public class Simulation {
 
 
     /**
-     *
+     *Counts the population of each species
+     * @param species is the current species to iterate through
      */
     public int getCreatureCount(Species species){
         int count = 0;
@@ -136,7 +138,8 @@ public class Simulation {
         return count;
     }
     /**
-     *
+     *Decides which species won in the simulation
+     * @return the winner species
      */
     public Species winSpecies (){
         int maxCount=0;
@@ -158,7 +161,10 @@ public class Simulation {
         return win;
     }
     /**
-     *
+     *Checks if a creature can occupy land, water or both
+     * @param species of the creature
+     * @param creature to check the condition
+     * @return boolean value
      */
     private boolean canBeHere (Species species, Creature creature){
         if (species == bird) {
@@ -174,7 +180,8 @@ public class Simulation {
         return false;
     }
     /**
-     *
+     *Adds new creatures
+     * @param species of the new creature
      */
     void initCreature (Species species){
         for (int i=0; i<mapOfCreatures.get(Character.valueOf(species.getCharacter())).intValue() ; i++){
@@ -187,7 +194,7 @@ public class Simulation {
         }
     }
     /**
-     *
+     *Decides the order of object initialization
      */
     void firstAddToMap (){
         initCreature(wolf);
@@ -199,7 +206,7 @@ public class Simulation {
         updateMap(creatureList);
     }
     /**
-     *
+     *Handles movement logic
      */
     void moving(){
         for(int j=10; j>0; j--){
@@ -229,7 +236,7 @@ public class Simulation {
     }
 
     /**
-     *
+     * Handles fighting logic
      */
     boolean fighting (){
         List<Creature> yetToFight = new ArrayList<>(creatureList);
@@ -242,7 +249,7 @@ public class Simulation {
         return somebodyAttacks;
     }
     /**
-     *
+     * Handles breeding logic
      */
     void breeding (){
         List<Creature> yetToBreed = new ArrayList<>(creatureList);
@@ -256,7 +263,7 @@ public class Simulation {
         }
     }
     /**
-     *
+     * Opens map GUI and shows simulation cycles
      */
     void simulationCycle()
     {
@@ -284,7 +291,8 @@ public class Simulation {
         }
     }
     /**
-     *
+     *Handles map update schedule
+     * @param year to check if the year is below the maximum amount
      */
     private void printMap(int year){
         updateMap(creatureList);
@@ -323,7 +331,10 @@ public class Simulation {
         creature.setY(y);
     }
     /**
-     *
+     * Checks if current spot is available
+     * @param creature to check the spot for
+     * @param creatureList to iterate through
+     * @return boolean value of isFree check
      */
     private boolean isFree (Creature creature, List <Creature> creatureList){
         for (int i=0; i<creatureList.size(); i++){
@@ -335,7 +346,7 @@ public class Simulation {
 
     }
     /**
-     *
+     *Initializes Map object
      */
     private void init(){
         map = new Map(mapName);
@@ -345,7 +356,10 @@ public class Simulation {
         generateMap();
     }
     /**
-     *
+     * Shows final results of the simulation
+     * @param frame in which the result is supposed to render in
+     * @param mapCrFromGUI hashmap of characters of species and their corresponding number of population
+     * @param mapNameFromGUI is the name of window
      */
     private void globalFunction(HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI, JFrame frame){
         simulationCycle();
@@ -359,9 +373,6 @@ public class Simulation {
         frame.dispose();
         EndingWindow endingWindow = new EndingWindow(mapOfCreatures,nameOfWinner);
     }
-    /**
-     *
-     */
     public static void main (HashMap<Character, Integer> mapCrFromGUI, String mapNameFromGUI) {
         Simulation simulation = new Simulation(years , mapCrFromGUI, mapNameFromGUI);
         simulation.init();
