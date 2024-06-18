@@ -35,6 +35,7 @@ public class GUI extends JFrame {
      * Contains all the components placed in GUI frame
      * Sets GroupLayout for frame
      * Called out in default constructor
+     * if user inputs path to csv file, then simulation will begin with data from file, if not, then it will be input manually by user from JSpinners
      */
     public void initComponents() {
         biomes.add(island);
