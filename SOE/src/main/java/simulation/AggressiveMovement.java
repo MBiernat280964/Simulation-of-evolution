@@ -1,20 +1,23 @@
 package simulation;
 
 import java.util.List;
-
+/**
+ * Object <code>AggressiveMovement</code> Is responsible for aggressive creatures moving behaviour
+ */
 public class AggressiveMovement extends BaseMovementLogic{
+    /**
+     * Chooses direction for the creature
+     *
+     * @param creature The object that direction is selected
+     * @param creatureList List of the entire population to iterate through
+     * @param surfaceLayer two-dimensional array of surface
+     * @return Array of direction for creature
+     */
     @Override
     protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList, char[][] surfaceLayer) {
-        int friendDist = creature.getSpecies().getSightRange();
         List<Creature> friends = findNearestFriends(creature, creatureList);
-        if (!friends.isEmpty()) {
-            friendDist = calculateDistance(creature, friends.get(0));
-        }
-        int foodDist = creature.getSpecies().getSightRange();
         List<Creature> food = findNearestFood(creature, creatureList);
-        if (!food.isEmpty()) {
-            foodDist = calculateDistance(creature, food.get(0));
-        }
+
         Creature other;
         if(!food.isEmpty()){
             other = food.get(random.nextInt(food.size()));

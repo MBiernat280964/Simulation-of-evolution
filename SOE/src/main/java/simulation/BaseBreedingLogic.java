@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 /**
- * Is an implementation of BreedingLogic Interface
+ * Object <code>BaseBreedingLogic</code> Is responsible for creating new creatures
  */
 public abstract class BaseBreedingLogic implements BreedingLogic{
 
@@ -15,6 +15,8 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      *
      * @param creature The object to check if the breeding behavior is possible
      * @param creatureList List of the entire population
+     * @param surfaceLayer two-dimensional array of surface
+     * @param tab array with localisation of new creature
      * @return true Returns true if breeding behavior is possible
      */
     protected boolean isBreedingEnabled(Creature creature, List<Creature> creatureList, char [][] surfaceLayer, int[] tab) {
@@ -50,6 +52,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * Chooses a spot around creature and returns an integer array
      *
      * @param creature The object to choose a surrounding spot of
+     * @param surfaceLayer two-dimensional array of surface
      * @return the coordinates for the new creature to appear
      */
     private int[] chooseBreedingSpot(Creature creature, char[][] surfaceLayer){
@@ -71,7 +74,6 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
     }
     /**
      * Checks if an enemy is near, returns a boolean
-     *
      *
      * @param creature The object to check surroundings of
      * @param creatureList List of the entire population to iterate through
@@ -156,6 +158,7 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      * @param creature The first parent of the new creature
      * @param secondParent The second parent of the new creature
      * @param creatureList List of the entire population to iterate through
+     * @param surfaceLayer two-dimensional array of surface
      */
     protected void breed(Creature creature, Creature secondParent, List<Creature> creatureList, char[][] surfaceLayer) {
         int tab[] = chooseBreedingSpot(creature, surfaceLayer);
@@ -178,6 +181,8 @@ public abstract class BaseBreedingLogic implements BreedingLogic{
      *
      * @param creature The object to perform breeding for
      * @param creatureList List of the entire population
+     * @param populationCount List of the entire population to count
+     * @param surfaceLayer two-dimensional array of surface
      */
     @Override
     public void performBreeding(Creature creature, List<Creature> creatureList, int populationCount, char[][] surfaceLayer) {

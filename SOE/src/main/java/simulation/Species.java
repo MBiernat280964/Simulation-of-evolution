@@ -23,55 +23,27 @@ public class Species {
         return speed;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
     public int getBaseHp() {
         return baseHp;
-    }
-
-    public void setBaseHp(int baseHp) {
-        this.baseHp = baseHp;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getBreedingChance() {
         return breedingChance;
-    }
-
-    public void setBreedingChance(int breedingChance) {
-        this.breedingChance = breedingChance;
     }
 
     public int getMaxPopulation() {
         return maxPopulation;
     }
 
-    public void setMaxPopulation(int maxPopulation) {
-        this.maxPopulation = maxPopulation;
-    }
-
     public char getCharacter() {
         return character;
     }
 
-    public void setCharacter(char character) {
-        this.character = character;
-    }
-
     public int getSightRange() {
         return sightRange;
-    }
-
-    public void setSightRange(int sightRange) {
-        this.sightRange = sightRange;
     }
 }

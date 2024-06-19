@@ -3,17 +3,32 @@ package simulation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * Object <code>BaseMovementLogic</code> Is responsible for selecting movement path and moving the creature
+ */
 public abstract class BaseMovementLogic implements MovementLogic{
     protected EnemyFoodUtility enemyFoodUtility;
     Random random = new Random();
 
-
+    /**
+     * Calculate distance between two creatures
+     *
+     * @param creature the first object whose distance is to be calculated
+     * @param other the second object whose distance is to be calculated
+     * @return value of distance between two creatures
+     */
     protected int calculateDistance(Creature creature, Creature other){
         int dist = Math.abs(creature.getX() - other.getX()) + Math.abs(creature.getY() - other.getY());
         return dist;
     }
 
+    /**
+     * Create a list of the nearest enemies for the creature, returns a list of enemies
+     *
+     * @param creature The object to check surroundings of
+     * @param creatureList List of the entire population to iterate through
+     * @return List of enemies around the creature
+     */
     protected List<Creature> findNearestEnemies (Creature creature, List<Creature> creatureList){
         int minDistanceToEnemy = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
@@ -32,6 +47,13 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
+    /**
+     * Create a list of the nearest friends for the creature, returns a list of enemies
+     *
+     * @param creature The object to check surroundings of
+     * @param creatureList List of the entire population to iterate through
+     * @return List of friends around the creature
+     */
     protected List<Creature> findNearestFriends (Creature creature, List<Creature> creatureList){
         int minDistanceToFriend = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
@@ -50,6 +72,13 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
+    /**
+     * Create a list of the nearest food for the creature, returns a list of enemies
+     *
+     * @param creature The object to check surroundings of
+     * @param creatureList List of the entire population to iterate through
+     * @return List of food around the creature
+     */
     protected List<Creature> findNearestFood (Creature creature, List<Creature> creatureList){
         int minDistanceToFood = creature.getSpecies().getSightRange();
         List<Creature> results = new ArrayList<>();
@@ -68,20 +97,19 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return results;
     }
 
+    /**
+     * Chooses direction for the creature
+     *
+     * @param creature The object that direction is selected
+     * @param creatureList List of the entire population to iterate through
+     * @param surfaceLayer two-dimensional array of surface
+     * @return Array of direction for creature
+     */
     protected int[] chooseMoveDirection (Creature creature, List<Creature> creatureList, char[][] surfaceLayer) {
         List<Creature> enemies = findNearestEnemies(creature, creatureList);
-
-        int foodDist = creature.getSpecies().getSightRange();
         List<Creature> food = findNearestFood(creature, creatureList);
-        if (!food.isEmpty()) {
-            foodDist = calculateDistance(creature, food.get(0));
-        }
-
-        int friendDist = creature.getSpecies().getSightRange();
         List<Creature> friends = findNearestFriends(creature, creatureList);
-        if (!friends.isEmpty()) {
-            friendDist = calculateDistance(creature, friends.get(0));
-        }
+
         Creature other;
         int goForward;
         if(!enemies.isEmpty()) {
@@ -106,7 +134,12 @@ public abstract class BaseMovementLogic implements MovementLogic{
         return new int[]{x,y};
     }
 
-
+    /**
+     * Changes velocity for creature
+     *
+     * @param creature The object that direction is selected
+     * @param surfaceLayer two-dimensional array of surface
+     */
     protected void chooseVelocity(Creature creature, char[][] surfaceLayer){
         int[] velocity = new int[2];
         do {
@@ -115,6 +148,14 @@ public abstract class BaseMovementLogic implements MovementLogic{
         } while (creature.getX()==velocity[0] && creature.getY()==velocity[1]);
         creature.setVelocity(velocity);
     }
+    /**
+     * Checks if move is possible
+     *
+     * @param creatureList List of the entire population
+     * @param newSpot array of parameters of new spot
+     * @param surfaceLayer two-dimensional array of surface
+     * @return is move possible or not
+     */
      protected boolean isMovePossible(List<Creature> creatureList, int[] newSpot, char[][] surfaceLayer){
         for (int i=0; i<creatureList.size(); i++){
             if ((creatureList.get(i).getX() == newSpot[0] && creatureList.get(i).getY()== newSpot[1])){
@@ -126,6 +167,13 @@ public abstract class BaseMovementLogic implements MovementLogic{
         }
         return true;
     }
+    /**
+     * Checks for all conditions for moving and performs the moving behavior
+     *
+     * @param creature The object to perform moving for
+     * @param creatureList List of the entire population
+     * @param surfaceLayer two-dimensional array of surface
+     */
     @Override
     public void performSingleStep(Creature creature, List<Creature> creatureList, char [][] surfaceLayer) {
         int[] moveDirection = chooseMoveDirection(creature, creatureList, surfaceLayer);
