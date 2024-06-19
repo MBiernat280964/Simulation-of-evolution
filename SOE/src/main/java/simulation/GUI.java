@@ -13,6 +13,9 @@ public class GUI extends JFrame {
     String mapName = "riverside";
     HashMap<Character, Integer> mapOfCreatures = new HashMap<>();
 
+    /**
+     * default constructor
+     */
     public GUI() {
         int heightt = Toolkit.getDefaultToolkit().getScreenSize().height;
         int widthh = Toolkit.getDefaultToolkit().getScreenSize().width;
