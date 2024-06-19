@@ -1,5 +1,7 @@
 package simulation;
-
+/**
+ * Object <code>Species</code> has information about species
+ */
 public class Species {
     private int speed;
     private int baseHp;
@@ -8,7 +10,9 @@ public class Species {
     private int maxPopulation;
     private char character;
     private int sightRange;
-
+    /**
+     *Constructor for species
+     */
     public Species(int speed, int baseHp, String name, int breedingChance, int maxPopulation, char character, int sightRange) {
         this.speed = speed;
         this.baseHp = baseHp;

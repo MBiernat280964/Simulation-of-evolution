@@ -1,7 +1,9 @@
 package simulation;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * Object <code>Creature</code> has information about the creature
+ */
 public class Creature {
     private Species species;
     private int x;
@@ -10,7 +12,9 @@ public class Creature {
     private boolean breedingEnabled;
     private int speed;
     private int[] velocity;
-
+    /**
+     *Constructor for creature
+     */
     public Creature(Species species) {
         this.species = species;
     }
